@@ -1,0 +1,270 @@
+{
+  "info": {
+    "name": "API Concursos",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" },
+    { "key": "token", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"admin\",\n  \"senha\": \"senha12345\"\n}"
+            },
+            "url": "{{baseUrl}}/auth/login"
+          }
+        },
+        {
+          "name": "Trocar Senha",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"senhaAtual\": \"senha12345\",\n  \"novaSenha\": \"novaSenha123\"\n}"
+            },
+            "url": "{{baseUrl}}/auth/senha"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Usuários",
+      "item": [
+        {
+          "name": "Cadastrar Usuário",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"admin\",\n  \"senha\": \"senha12345\"\n}"
+            },
+            "url": "{{baseUrl}}/usuarios"
+          }
+        },
+        {
+          "name": "Listar Usuários",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/usuarios"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Questões",
+      "item": [
+        {
+          "name": "Cadastrar Questão com Alternativas",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"referencia\": \"CESPE 2024\",\n  \"descricao\": \"Pergunta de exemplo\",\n  \"ativo\": true,\n  \"alternativas\": [\n    { \"letra\": \"A\", \"descricaoAlt\": \"Alternativa A\", \"correta\": false },\n    { \"letra\": \"B\", \"descricaoAlt\": \"Alternativa B\", \"correta\": true }\n  ]\n}"
+            },
+            "url": "{{baseUrl}}/questoes"
+          }
+        },
+        {
+          "name": "Listar Questões (com filtros)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/questoes?pagina=1&limite=10&ativo=true"
+          }
+        },
+        {
+          "name": "Buscar Questão por ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/questoes/1"
+          }
+        },
+        {
+          "name": "Atualizar Questão",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"descricao\": \"Pergunta atualizada\",\n  \"alternativas\": [\n    { \"letra\": \"A\", \"descricaoAlt\": \"Nova A\", \"correta\": true },\n    { \"letra\": \"B\", \"descricaoAlt\": \"Nova B\", \"correta\": false }\n  ]\n}"
+            },
+            "url": "{{baseUrl}}/questoes/1"
+          }
+        },
+        {
+          "name": "Excluir Questão",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/questoes/1"
+          }
+        },
+        {
+          "name": "Dashboard",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/questoes/dashboard"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Alternativas",
+      "item": [
+        {
+          "name": "Listar por Questão",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/alternativas/questao/1"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Temas",
+      "item": [
+        {
+          "name": "Cadastrar Tema",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"nome\": \"Direito Constitucional\"\n}" },
+            "url": "{{baseUrl}}/temas"
+          }
+        },
+        {
+          "name": "Listar Temas",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/temas"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Progresso (painel do usuário)",
+      "item": [
+        {
+          "name": "Resumo (pontos, nível, streak, badges)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/progresso/resumo"
+          }
+        },
+        {
+          "name": "Evolução (gráfico)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/progresso/evolucao?dias=30"
+          }
+        },
+        {
+          "name": "Calendário de acessos",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/progresso/calendario?dias=365"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Respostas",
+      "item": [
+        {
+          "name": "Responder Questão Avulsa",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"idQuestao\": 1,\n  \"idAlternativa\": 2\n}" },
+            "url": "{{baseUrl}}/respostas"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Simulados",
+      "item": [
+        {
+          "name": "Gerar Simulado",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"idTema\": null,\n  \"banca\": null,\n  \"dificuldade\": null,\n  \"quantidade\": 10\n}" },
+            "url": "{{baseUrl}}/simulados"
+          }
+        },
+        {
+          "name": "Finalizar Simulado",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"respostas\": [\n    { \"idQuestao\": 1, \"idAlternativa\": 2 }\n  ]\n}" },
+            "url": "{{baseUrl}}/simulados/1/finalizar"
+          }
+        },
+        {
+          "name": "Histórico de Simulados",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/simulados"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Ranking",
+      "item": [
+        {
+          "name": "Ranking Geral",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/ranking?periodo=geral"
+          }
+        }
+      ]
+    }
+  ]
+}

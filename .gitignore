@@ -1,0 +1,21 @@
+# Dependências
+node_modules/
+
+# Variáveis de ambiente e segredos — NUNCA commitar
+.env
+.env.*
+!.env.example
+
+# Logs
+npm-debug.log*
+*.log
+logs/
+
+# Build/cobertura
+coverage/
+dist/
+
+# Editor/SO
+.vscode/
+.DS_Store
+Thumbs.db

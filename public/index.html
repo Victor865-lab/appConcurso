@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-tema="claro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Entrar — Painel de Concursos</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="pagina-login">
+
+  <div class="login-selo" aria-hidden="true">
+    <i class="bi bi-patch-check-fill"></i>
+  </div>
+
+  <main class="login-container">
+    <div class="login-card">
+      <div class="login-cabecalho">
+        <span class="login-protocolo">PROTOCOLO Nº 001</span>
+        <h1>Painel de Concursos</h1>
+        <p>Acesso restrito à equipe de gestão de questões.</p>
+      </div>
+
+      <form id="form-login" novalidate>
+        <div class="mb-3">
+          <label for="nome" class="form-label">Usuário</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-person"></i></span>
+            <input type="text" class="form-control" id="nome" name="nome" autocomplete="username" required>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="senha" class="form-label">Senha</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+            <input type="password" class="form-control" id="senha" name="senha" autocomplete="current-password" required>
+            <button class="btn btn-outline-secondary" type="button" id="btn-ver-senha" tabindex="-1">
+              <i class="bi bi-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <div id="alerta-login" class="alert alert-danger d-none" role="alert"></div>
+
+        <button type="submit" class="btn btn-primary w-100 btn-entrar" id="btn-login">
+          <span class="spinner-border spinner-border-sm d-none" id="spinner-login"></span>
+          <span id="texto-login">Entrar</span>
+        </button>
+      </form>
+
+      <p class="login-rodape">
+        Novo por aqui? <a href="#" id="link-cadastro">Solicitar acesso</a>
+      </p>
+    </div>
+  </main>
+
+  <!-- Modal de cadastro rápido -->
+  <div class="modal fade" id="modalCadastro" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Solicitar acesso</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="form-cadastro">
+            <div class="mb-3">
+              <label class="form-label">Nome de usuário</label>
+              <input type="text" class="form-control" id="cad-nome" minlength="3" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Senha (mínimo 8 caracteres)</label>
+              <input type="password" class="form-control" id="cad-senha" minlength="8" required>
+            </div>
+            <div id="alerta-cadastro" class="alert alert-danger d-none"></div>
+            <button type="submit" class="btn btn-primary w-100">Cadastrar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toast-container"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/login.js"></script>
+</body>
+</html>

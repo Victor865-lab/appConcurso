@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-tema="claro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel de Concursos</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- Menu lateral -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-topo">
+      <span class="sidebar-selo"><i class="bi bi-patch-check-fill"></i></span>
+      <div class="sidebar-marca">
+        <strong>Concursos</strong>
+        <small>Painel de Gestão</small>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button class="nav-item ativo" data-secao="dashboard">
+        <i class="bi bi-grid-1x2"></i> Dashboard
+      </button>
+      <button class="nav-item" data-secao="questoes">
+        <i class="bi bi-journal-text"></i> Questões
+      </button>
+      <button class="nav-item" data-secao="usuarios">
+        <i class="bi bi-people"></i> Usuários
+      </button>
+      <button class="nav-item" data-secao="ranking">
+        <i class="bi bi-bar-chart-steps"></i> Ranking
+      </button>
+    </nav>
+
+    <div class="sidebar-rodape">
+      <button class="btn-tema" id="btn-tema" title="Alternar tema">
+        <i class="bi bi-moon-stars"></i>
+        <span>Tema escuro</span>
+      </button>
+      <button class="btn-sair" id="btn-sair">
+        <i class="bi bi-box-arrow-right"></i> Sair
+      </button>
+    </div>
+  </aside>
+
+  <!-- Conteúdo -->
+  <div class="conteudo">
+
+    <header class="topbar">
+      <button class="btn-menu-mobile d-lg-none" id="btn-menu-mobile"><i class="bi bi-list"></i></button>
+      <div class="topbar-titulo">
+        <span class="topbar-eyebrow" id="titulo-eyebrow">Painel</span>
+        <h1 id="titulo-secao">Dashboard</h1>
+      </div>
+      <div class="topbar-usuario">
+        <i class="bi bi-person-circle"></i>
+        <span id="nome-usuario-logado">—</span>
+      </div>
+    </header>
+
+    <main class="area-principal">
+
+      <!-- ============ SEÇÃO: DASHBOARD ============ -->
+      <section id="secao-dashboard" class="secao">
+        <div class="cartoes-resumo">
+          <div class="cartao-stat">
+            <div class="cartao-stat-icone bg-navy"><i class="bi bi-journals"></i></div>
+            <div>
+              <span class="cartao-stat-numero" id="stat-total">0</span>
+              <span class="cartao-stat-label">Questões cadastradas</span>
+            </div>
+          </div>
+          <div class="cartao-stat">
+            <div class="cartao-stat-icone bg-verde"><i class="bi bi-check-circle"></i></div>
+            <div>
+              <span class="cartao-stat-numero" id="stat-ativas">0</span>
+              <span class="cartao-stat-label">Questões ativas</span>
+            </div>
+          </div>
+          <div class="cartao-stat">
+            <div class="cartao-stat-icone bg-ambar"><i class="bi bi-patch-check"></i></div>
+            <div>
+              <span class="cartao-stat-numero" id="stat-respondidas">0</span>
+              <span class="cartao-stat-label">Respondidas</span>
+            </div>
+          </div>
+          <div class="cartao-stat">
+            <div class="cartao-stat-icone bg-vermelho"><i class="bi bi-hourglass-split"></i></div>
+            <div>
+              <span class="cartao-stat-numero" id="stat-pendentes">0</span>
+              <span class="cartao-stat-label">Pendentes</span>
+            </div>
+          </div>
+          <div class="cartao-stat">
+            <div class="cartao-stat-icone bg-roxo"><i class="bi bi-people-fill"></i></div>
+            <div>
+              <span class="cartao-stat-numero" id="stat-usuarios">0</span>
+              <span class="cartao-stat-label">Usuários</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-dashboard">
+          <div class="painel-grafico">
+            <h2>Status das questões</h2>
+            <canvas id="grafico-status" height="90"></canvas>
+          </div>
+
+          <div class="painel-grafico painel-online">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h2 class="mb-0">Usuários online</h2>
+              <span class="badge-online-total" id="online-total">0</span>
+            </div>
+            <div id="lista-usuarios-online" class="lista-usuarios-online"></div>
+            <p class="text-muted small mb-0 d-none" id="online-vazio">Nenhum usuário online no momento.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ SEÇÃO: RANKING ============ -->
+      <section id="secao-ranking" class="secao d-none">
+        <div class="barra-acoes">
+          <div class="btn-group" role="group">
+            <button class="btn btn-outline-secondary btn-periodo ativo" data-periodo="geral">Geral</button>
+            <button class="btn btn-outline-secondary btn-periodo" data-periodo="mensal">Mensal</button>
+            <button class="btn btn-outline-secondary btn-periodo" data-periodo="semanal">Semanal</button>
+          </div>
+        </div>
+
+        <div class="tabela-wrapper">
+          <table class="table tabela-usuarios">
+            <thead><tr><th>#</th><th>Usuário</th><th>Pontos</th><th>Respondidas</th></tr></thead>
+            <tbody id="corpo-tabela-ranking"></tbody>
+          </table>
+          <div id="ranking-vazio" class="estado-vazio d-none">
+            <i class="bi bi-bar-chart-steps"></i>
+            <p>Nenhum dado de ranking para o período selecionado.</p>
+          </div>
+          <div id="ranking-loading" class="estado-loading">
+            <div class="spinner-border text-primary"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ SEÇÃO: QUESTÕES ============ -->
+      <section id="secao-questoes" class="secao d-none">
+        <div class="barra-acoes">
+          <div class="busca-wrapper">
+            <i class="bi bi-search"></i>
+            <input type="text" id="busca-questao" placeholder="Pesquisar por referência ou palavra-chave...">
+          </div>
+
+          <div class="filtros-wrapper">
+            <select class="form-select form-select-sm" id="filtro-ativo">
+              <option value="">Ativo/Inativo</option>
+              <option value="true">Ativas</option>
+              <option value="false">Inativas</option>
+            </select>
+            <select class="form-select form-select-sm" id="filtro-respondida">
+              <option value="">Respondida?</option>
+              <option value="true">Respondidas</option>
+              <option value="false">Pendentes</option>
+            </select>
+            <button class="btn btn-sm btn-outline-secondary" id="btn-limpar-filtros">Limpar</button>
+          </div>
+
+          <button class="btn btn-primary btn-nova-questao" id="btn-nova-questao">
+            <i class="bi bi-plus-lg"></i> Nova questão
+          </button>
+        </div>
+
+        <div class="tabela-wrapper">
+          <table class="table tabela-questoes">
+            <thead>
+              <tr>
+                <th>Protocolo</th>
+                <th>Referência</th>
+                <th>Descrição</th>
+                <th>Status</th>
+                <th class="text-end">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="corpo-tabela-questoes">
+              <!-- preenchido via JS -->
+            </tbody>
+          </table>
+          <div id="questoes-vazio" class="estado-vazio d-none">
+            <i class="bi bi-inbox"></i>
+            <p>Nenhuma questão encontrada. Cadastre a primeira questão para começar.</p>
+          </div>
+          <div id="questoes-loading" class="estado-loading">
+            <div class="spinner-border text-primary"></div>
+          </div>
+        </div>
+
+        <nav class="paginacao-wrapper">
+          <ul class="pagination pagination-sm" id="paginacao-questoes"></ul>
+        </nav>
+      </section>
+
+      <!-- ============ SEÇÃO: USUÁRIOS ============ -->
+      <section id="secao-usuarios" class="secao d-none">
+        <div class="barra-acoes">
+          <div class="busca-wrapper">
+            <i class="bi bi-search"></i>
+            <input type="text" id="busca-usuario" placeholder="Pesquisar por nome...">
+          </div>
+          <button class="btn btn-primary btn-nova-questao" id="btn-novo-usuario">
+            <i class="bi bi-person-plus"></i> Novo usuário
+          </button>
+        </div>
+
+        <div class="tabela-wrapper">
+          <table class="table tabela-usuarios">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Status</th>
+                <th>Cadastrado em</th>
+                <th class="text-end">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="corpo-tabela-usuarios"></tbody>
+          </table>
+          <div id="usuarios-vazio" class="estado-vazio d-none">
+            <i class="bi bi-person-x"></i>
+            <p>Nenhum usuário encontrado.</p>
+          </div>
+          <div id="usuarios-loading" class="estado-loading">
+            <div class="spinner-border text-primary"></div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<!-- ================= MODAL: QUESTÃO (cadastro/edição) ================= -->
+<div class="modal fade" id="modalQuestao" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalQuestaoTitulo">Nova questão</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="form-questao">
+          <input type="hidden" id="questao-id">
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Referência <span class="text-muted">(opcional)</span></label>
+              <input type="text" class="form-control" id="questao-referencia" placeholder="Ex: CESPE 2024">
+            </div>
+            <div class="col-md-6 d-flex align-items-end">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="questao-ativo" checked>
+                <label class="form-check-label" for="questao-ativo">Questão ativa</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="row g-3 mb-3">
+            <div class="col-md-3">
+              <label class="form-label">Tema</label>
+              <div class="input-group">
+                <select class="form-select" id="questao-tema">
+                  <option value="">Nenhum</option>
+                </select>
+                <button class="btn btn-outline-secondary" type="button" id="btn-novo-tema" title="Criar novo tema">
+                  <i class="bi bi-plus-lg"></i>
+                </button>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Banca</label>
+              <input type="text" class="form-control" id="questao-banca" placeholder="Ex: CESPE">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Ano</label>
+              <input type="number" class="form-control" id="questao-ano" placeholder="Ex: 2024" min="1900" max="2100">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Dificuldade</label>
+              <select class="form-select" id="questao-dificuldade">
+                <option value="">Não definida</option>
+                <option value="facil">Fácil</option>
+                <option value="medio">Médio</option>
+                <option value="dificil">Difícil</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Descrição da questão *</label>
+            <textarea class="form-control" id="questao-descricao" rows="3" required></textarea>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <label class="form-label mb-0">Alternativas *</label>
+            <button type="button" class="btn btn-sm btn-outline-primary" id="btn-add-alternativa">
+              <i class="bi bi-plus-lg"></i> Adicionar alternativa
+            </button>
+          </div>
+          <div id="lista-alternativas"></div>
+
+          <div id="alerta-questao" class="alert alert-danger d-none mt-3"></div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" id="btn-salvar-questao">
+          <span class="spinner-border spinner-border-sm d-none" id="spinner-salvar-questao"></span>
+          Salvar questão
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= MODAL: CONFIRMAÇÃO DE EXCLUSÃO ================= -->
+<div class="modal fade" id="modalConfirmar" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body text-center py-4">
+        <i class="bi bi-exclamation-triangle text-danger" style="font-size: 2.5rem;"></i>
+        <h5 class="mt-3" id="confirmar-titulo">Confirmar exclusão</h5>
+        <p class="text-muted" id="confirmar-texto">Esta ação não pode ser desfeita.</p>
+        <div class="d-flex gap-2 justify-content-center mt-3">
+          <button class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button class="btn btn-danger" id="btn-confirmar-acao">Excluir</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= MODAL: USUÁRIO (cadastro/edição) ================= -->
+<div class="modal fade" id="modalUsuario" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalUsuarioTitulo">Novo usuário</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="form-usuario">
+          <input type="hidden" id="usuario-id">
+          <div class="mb-3">
+            <label class="form-label">Nome de usuário</label>
+            <input type="text" class="form-control" id="usuario-nome" minlength="3" required>
+          </div>
+          <div class="mb-3" id="grupo-usuario-senha">
+            <label class="form-label">Senha (mínimo 8 caracteres)</label>
+            <input type="password" class="form-control" id="usuario-senha" minlength="8">
+          </div>
+          <div id="alerta-usuario" class="alert alert-danger d-none"></div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" id="btn-salvar-usuario">Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3" id="toast-container"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.0/chart.umd.min.js"></script>
+<script src="js/api.js"></script>
+<script src="js/dashboard.js"></script>
+<script src="js/questoes.js"></script>
+<script src="js/usuarios.js"></script>
+<script src="js/online.js"></script>
+<script src="js/ranking.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

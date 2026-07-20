@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-tema="claro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trilha de Estudos</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/estilo.css">
+</head>
+<body>
+
+<div class="app-shell">
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-topo">
+      <span class="sidebar-selo"><i class="bi bi-lightning-charge-fill"></i></span>
+      <div class="sidebar-marca">
+        <strong>Trilha</strong>
+        <small>de Estudos</small>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button class="nav-item ativo" data-secao="dashboard"><i class="bi bi-speedometer2"></i> Painel</button>
+      <button class="nav-item" data-secao="mapeamento"><i class="bi bi-map"></i> Questões</button>
+      <button class="nav-item" data-secao="simulados"><i class="bi bi-pencil-square"></i> Simulados</button>
+      <button class="nav-item nav-item-premium" data-secao="assinatura"><span class="nav-item-coroa">👑</span> Assinatura Premium</button>
+    </nav>
+
+    <div class="sidebar-cartao-xp">
+      <div class="d-flex justify-content-between align-items-center mb-1">
+        <span id="sidebar-nivel-nome">Aspirante</span>
+        <span id="sidebar-nivel-num" class="badge-nivel">Nv. 1</span>
+      </div>
+      <div class="barra-xp-wrapper">
+        <div class="barra-xp" id="sidebar-barra-xp" style="width:0%"></div>
+      </div>
+      <small class="text-muted" id="sidebar-xp-texto">0 pontos</small>
+    </div>
+
+    <div class="sidebar-rodape">
+      <button class="btn-tema" id="btn-tema"><i class="bi bi-moon-stars"></i> <span>Tema escuro</span></button>
+      <button class="btn-sair" id="btn-sair"><i class="bi bi-box-arrow-right"></i> Sair</button>
+    </div>
+  </aside>
+
+  <div class="conteudo">
+    <header class="topbar">
+      <button class="btn-menu-mobile d-lg-none" id="btn-menu-mobile"><i class="bi bi-list"></i></button>
+      <div class="topbar-titulo">
+        <span class="topbar-eyebrow" id="titulo-eyebrow">Sua jornada</span>
+        <h1 id="titulo-secao">Painel</h1>
+      </div>
+      <div class="topbar-streak" title="Sequência de dias seguidos estudando">
+        <i class="bi bi-fire"></i>
+        <span id="topbar-streak-numero">0</span>
+      </div>
+      <div class="dropdown">
+        <button class="topbar-usuario" id="btn-avatar-usuario" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="bi bi-person-circle"></i>
+          <span id="nome-usuario-logado">—</span>
+          <i class="bi bi-chevron-down topbar-usuario-seta"></i>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="btn-avatar-usuario">
+          <li><button class="dropdown-item" type="button" id="btn-abrir-configuracoes"><i class="bi bi-gear me-2"></i>Configurações</button></li>
+          <li><button class="dropdown-item" type="button" id="btn-abrir-assinatura-info"><i class="bi bi-credit-card me-2"></i>Assinatura</button></li>
+        </ul>
+      </div>
+    </header>
+
+    <main class="area-principal">
+
+      <!-- ============ DASHBOARD ============ -->
+      <section id="secao-dashboard" class="secao">
+        <div class="cartoes-resumo">
+          <div class="cartao-stat">
+            <div class="cartao-stat-icone bg-teal"><i class="bi bi-gem"></i></div>
+            <div><span class="cartao-stat-numero" id="stat-pontos">0</span><span class="cartao-stat-label">Pontos totais</span></div>
+          </div>
+          <div class="cartao-stat">
+            <div class="cartao-stat-icone bg-laranja"><i class="bi bi-fire"></i></div>
+            <div><span class="cartao-stat-numero" id="stat-streak">0</span><span class="cartao-stat-label">Sequência atual</span></div>
+          </div>
+          <div class="cartao-stat">
+            <div class="cartao-stat-icone bg-verde"><i class="bi bi-bullseye"></i></div>
+            <div><span class="cartao-stat-numero" id="stat-taxa">0%</span><span class="cartao-stat-label">Taxa de acerto</span></div>
+          </div>
+          <div class="cartao-stat">
+            <div class="cartao-stat-icone bg-roxo"><i class="bi bi-journal-check"></i></div>
+            <div><span class="cartao-stat-numero" id="stat-respondidas">0</span><span class="cartao-stat-label">Questões respondidas</span></div>
+          </div>
+        </div>
+
+        <div class="grid-dashboard">
+          <div class="painel-card painel-grafico">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h2 class="mb-0">Evolução</h2>
+              <div class="btn-group btn-group-sm" role="group">
+                <button class="btn btn-outline-secondary btn-modo-evolucao ativo" data-modo="semanal">Semanal</button>
+                <button class="btn btn-outline-secondary btn-modo-evolucao" data-modo="mensal">Mensal</button>
+              </div>
+            </div>
+            <canvas id="grafico-evolucao" height="350"></canvas>
+          </div>
+
+          <div class="painel-card">
+            <h2>Sequência de estudos</h2>
+            <p class="text-muted small mb-2">Quanto mais escuro o dia, mais acessos você fez nele.</p>
+            <div class="calendario-normal">
+              <div class="calendario-normal-cabecalho">
+                <button type="button" class="calendario-normal-nav" id="calendario-mes-anterior"><i class="bi bi-chevron-left"></i></button>
+                <span class="calendario-normal-titulo" id="calendario-normal-titulo"></span>
+                <button type="button" class="calendario-normal-nav" id="calendario-mes-proximo"><i class="bi bi-chevron-right"></i></button>
+              </div>
+              <div class="calendario-normal-semana">
+                <span>Dom</span><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span>
+              </div>
+              <div class="calendario-normal-grid" id="calendario-normal-grid"></div>
+            </div>
+            <div class="calendario-legenda">
+              <span>Menos</span>
+              <span class="quad nivel-0"></span><span class="quad nivel-1"></span>
+              <span class="quad nivel-2"></span><span class="quad nivel-3"></span><span class="quad nivel-4"></span>
+              <span>Mais</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="painel-card mt-4">
+          <h2>Conquistas</h2>
+          <div id="grid-badges" class="grid-badges"></div>
+        </div>
+      </section>
+
+      <!-- ============ MAPEAMENTO (feed estilo reels) ============ -->
+      <section id="secao-mapeamento" class="secao secao-reels d-none">
+        <div class="mapa-filtro-bar">
+          <div class="busca-wrapper">
+            <i class="bi bi-search"></i>
+            <input type="text" id="busca-mapa" placeholder="Pesquisar por palavra-chave...">
+          </div>
+          <div class="filtros-wrapper">
+            <select class="form-select form-select-sm" id="filtro-tema"><option value="">Tema</option></select>
+            <select class="form-select form-select-sm" id="filtro-banca"><option value="">Banca</option></select>
+            <select class="form-select form-select-sm" id="filtro-ano"><option value="">Ano</option></select>
+            <select class="form-select form-select-sm" id="filtro-dificuldade">
+              <option value="">Dificuldade</option>
+              <option value="facil">Fácil</option>
+              <option value="medio">Médio</option>
+              <option value="dificil">Difícil</option>
+            </select>
+            <button class="btn btn-sm btn-entrar" id="btn-filtrar-mapa"><i class="bi bi-funnel"></i> Filtrar</button>
+            <button class="btn btn-sm btn-outline-secondary" id="btn-limpar-filtros-mapa">Limpar</button>
+          </div>
+        </div>
+
+        <div id="reels-mapa" class="reels-mapa"></div>
+        <div id="mapa-vazio" class="estado-vazio d-none"><i class="bi bi-inbox"></i><p>Nenhuma questão encontrada com esses filtros.</p></div>
+        <div id="mapa-loading" class="estado-loading d-none"><div class="spinner-border text-primary"></div></div>
+      </section>
+
+      <!-- ============ SIMULADOS ============ -->
+      <section id="secao-simulados" class="secao d-none">
+
+        <div id="simulados-inicio">
+          <div class="painel-card">
+            <h2>Gerar novo simulado</h2>
+            <form id="form-gerar-simulado" class="row g-3 align-items-end">
+              <div class="col-md-3">
+                <label class="form-label">Tema</label>
+                <select class="form-select" id="sim-tema"><option value="">Qualquer</option></select>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Banca</label>
+                <select class="form-select" id="sim-banca"><option value="">Qualquer</option></select>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Dificuldade</label>
+                <select class="form-select" id="sim-dificuldade">
+                  <option value="">Qualquer</option>
+                  <option value="facil">Fácil</option>
+                  <option value="medio">Médio</option>
+                  <option value="dificil">Difícil</option>
+                </select>
+              </div>
+              <div class="col-md-2">
+                <label class="form-label">Quantidade</label>
+                <input type="number" class="form-control" id="sim-quantidade" value="10" min="1" max="50">
+              </div>
+              <div class="col-md-1">
+                <button type="submit" class="btn btn-entrar w-100" id="btn-gerar-simulado">
+                  <i class="bi bi-play-fill"></i>
+                </button>
+              </div>
+            </form>
+            <div id="alerta-simulado" class="alert alert-danger d-none mt-3"></div>
+          </div>
+
+          <div class="painel-card mt-4">
+            <h2>Histórico de simulados</h2>
+            <div class="tabela-wrapper">
+              <table class="table tabela-simulados">
+                <thead><tr><th>Data</th><th>Critérios</th><th>Questões</th><th>Acertos</th><th>Status</th><th></th></tr></thead>
+                <tbody id="corpo-tabela-simulados"></tbody>
+              </table>
+              <div id="simulados-vazio" class="estado-vazio d-none"><i class="bi bi-journal-x"></i><p>Você ainda não fez nenhum simulado.</p></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="simulados-execucao" class="d-none">
+          <div class="painel-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h2 class="mb-0">Simulado em andamento</h2>
+              <span class="badge-nivel" id="execucao-progresso">0 / 0 respondidas</span>
+            </div>
+            <div id="lista-questoes-execucao"></div>
+            <div class="d-flex justify-content-between mt-3">
+              <button class="btn btn-outline-secondary" id="btn-cancelar-simulado">Cancelar</button>
+              <button class="btn btn-entrar" id="btn-finalizar-simulado">Finalizar simulado</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="simulados-resultado" class="d-none">
+          <div class="painel-card text-center">
+            <i class="bi bi-trophy resultado-icone"></i>
+            <h2 id="resultado-titulo">Resultado do simulado</h2>
+            <p class="resultado-placar"><span id="resultado-acertos">0</span>/<span id="resultado-total">0</span> acertos</p>
+            <p class="text-muted">Você ganhou <strong><span id="resultado-pontos">0</span> pontos</strong></p>
+            <button class="btn btn-entrar mt-2" id="btn-voltar-simulados">Voltar</button>
+          </div>
+          <div class="painel-card mt-4">
+            <h2>Gabarito</h2>
+            <div id="lista-gabarito"></div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ============ ASSINATURA PREMIUM ============ -->
+      <section id="secao-assinatura" class="secao d-none">
+        <div id="assinatura-status-card" class="painel-card assinatura-status d-none"></div>
+
+        <div class="planos-grid">
+          <div class="plano-card" data-plano="mensal">
+            <h3>Mensal</h3>
+            <p class="plano-preco"><span class="plano-moeda">R$</span>19,90<span class="plano-periodo">/mês</span></p>
+            <button type="button" class="btn btn-entrar w-100 btn-assinar-plano" data-plano="mensal">Assinar</button>
+          </div>
+          <div class="plano-card" data-plano="trimestral">
+            <span class="plano-selo">Economize 16%</span>
+            <h3>Trimestral</h3>
+            <p class="plano-preco"><span class="plano-moeda">R$</span>49,90<span class="plano-periodo">/3 meses</span></p>
+            <button type="button" class="btn btn-entrar w-100 btn-assinar-plano" data-plano="trimestral">Assinar</button>
+          </div>
+          <div class="plano-card" data-plano="semestral">
+            <span class="plano-selo">Economize 17%</span>
+            <h3>Semestral</h3>
+            <p class="plano-preco"><span class="plano-moeda">R$</span>99,00<span class="plano-periodo">/6 meses</span></p>
+            <button type="button" class="btn btn-entrar w-100 btn-assinar-plano" data-plano="semestral">Assinar</button>
+          </div>
+          <div class="plano-card plano-destaque" data-plano="anual">
+            <span class="plano-selo plano-selo-destaque">Economize 25%</span>
+            <h3>Anual</h3>
+            <p class="plano-preco"><span class="plano-moeda">R$</span>179,00<span class="plano-periodo">/ano</span></p>
+            <button type="button" class="btn btn-entrar w-100 btn-assinar-plano" data-plano="anual">Assinar</button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<!-- MODAL: Reportar erro em uma questão (mapeamento) -->
+<div class="modal fade" id="modalDenuncia" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-flag-fill text-danger"></i> Reportar problema na questão</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <label class="form-label" for="denuncia-motivo">O que está errado nessa questão?</label>
+        <textarea class="form-control" id="denuncia-motivo" rows="4" maxlength="500" placeholder="Ex: o gabarito está errado, o enunciado tem um erro de digitação..."></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" id="btn-enviar-denuncia">Enviar denúncia</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Confirmar assinatura (cartão redireciona ao Mercado Pago; Pix mostra QR code aqui) -->
+<div class="modal fade" id="modalAssinatura" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">👑 Assinar plano <span id="modal-assinatura-plano-nome"></span></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div id="assinatura-form-pagamento">
+          <p class="text-muted small mb-3">Escolha a forma de pagamento e informe o e-mail para cobrança.</p>
+
+          <div class="btn-group w-100 mb-3" role="group">
+            <input type="radio" class="btn-check" name="metodo-pagamento" id="metodo-cartao" value="cartao" checked>
+            <label class="btn btn-outline-secondary" for="metodo-cartao"><i class="bi bi-credit-card"></i> Cartão de crédito</label>
+            <input type="radio" class="btn-check" name="metodo-pagamento" id="metodo-pix" value="pix">
+            <label class="btn btn-outline-secondary" for="metodo-pix"><i class="bi bi-qr-code"></i> Pix</label>
+          </div>
+
+          <label class="form-label" for="assinatura-email">E-mail para cobrança</label>
+          <input type="email" class="form-control" id="assinatura-email" placeholder="seuemail@exemplo.com">
+          <p class="text-muted small mt-2 mb-0">No Pix, uma nova cobrança é gerada a cada ciclo (não é débito automático como no cartão).</p>
+        </div>
+
+        <div id="assinatura-resultado-pix" class="d-none text-center">
+          <p class="mb-2">Escaneie o QR code ou use o Pix Copia e Cola:</p>
+          <img id="assinatura-pix-qrcode" src="" alt="QR code Pix" class="pix-qrcode mb-2">
+          <div class="input-group input-group-sm mb-3">
+            <input type="text" class="form-control" id="assinatura-pix-copia-cola" readonly>
+            <button class="btn btn-outline-secondary" type="button" id="btn-copiar-pix"><i class="bi bi-clipboard"></i></button>
+          </div>
+          <button type="button" class="btn btn-entrar w-100" id="btn-ja-paguei-pix">Já paguei, verificar</button>
+        </div>
+      </div>
+      <div class="modal-footer" id="assinatura-modal-rodape">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-entrar" id="btn-confirmar-assinatura">Ir para o pagamento</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Configurações (trocar nome / trocar senha) -->
+<div class="modal fade" id="modalConfiguracoes" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-gear"></i> Configurações</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="form-config-nome" class="mb-4">
+          <label class="form-label" for="config-nome">Nome de usuário</label>
+          <div class="input-group">
+            <input type="text" class="form-control" id="config-nome" minlength="3" maxlength="150" required>
+            <button type="submit" class="btn btn-entrar">Salvar</button>
+          </div>
+        </form>
+
+        <hr>
+
+        <form id="form-config-senha" class="mt-4">
+          <h6 class="mb-3">Trocar senha</h6>
+          <label class="form-label" for="config-senha-atual">Senha atual</label>
+          <input type="password" class="form-control mb-3" id="config-senha-atual" required>
+          <label class="form-label" for="config-senha-nova">Nova senha</label>
+          <input type="password" class="form-control mb-3" id="config-senha-nova" minlength="8" required>
+          <label class="form-label" for="config-senha-confirmar">Confirmar nova senha</label>
+          <input type="password" class="form-control mb-3" id="config-senha-confirmar" minlength="8" required>
+          <button type="submit" class="btn btn-entrar w-100">Trocar senha</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Assinatura (informações: plano atual e vencimento) -->
+<div class="modal fade" id="modalAssinaturaInfo" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-credit-card"></i> Assinatura</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div id="assinatura-info-conteudo"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3" id="toast-container"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.0/chart.umd.min.js"></script>
+<script src="js/api.js"></script>
+<script src="js/dashboard.js"></script>
+<script src="js/mapeamento.js"></script>
+<script src="js/simulados.js"></script>
+<script src="js/assinatura.js"></script>
+<script src="js/configuracoes.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
