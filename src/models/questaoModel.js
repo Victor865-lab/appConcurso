@@ -163,6 +163,8 @@ async function listar({
   dificuldade,
   ordenarPor = 'id',
   direcao = 'desc',
+  idUsuarioAtual,
+  priorizarNaoRespondidas = false,
 }) {
   const pool = await getPool();
   const offset = (pagina - 1) * limite;
@@ -212,19 +214,35 @@ async function listar({
   request.input('offset', sql.Int, offset);
   request.input('limite', sql.Int, Number(limite));
 
+  // Prioriza questões que o usuário logado ainda não respondeu (feed do
+  // aluno) — a resposta é por usuário (respostas_usuario), diferente do
+  // campo q.respondida, que é uma marcação global/administrativa.
+  const usarPrioridade = priorizarNaoRespondidas && idUsuarioAtual;
+  let colunaPrioridade = '';
+  let ordemPrioridade = '';
+  if (usarPrioridade) {
+    request.input('idUsuarioAtual', sql.Int, idUsuarioAtual);
+    colunaPrioridade = `,
+           CASE WHEN EXISTS (
+             SELECT 1 FROM respostas_usuario r
+             WHERE r.idQuestao = q.id AND r.idUsuario = @idUsuarioAtual
+           ) THEN 1 ELSE 0 END AS jaRespondidaPeloUsuario`;
+    ordemPrioridade = 'jaRespondidaPeloUsuario ASC, ';
+  }
+
   const result = await request.query(`
     SELECT q.id, q.referencia, q.descricao, q.respondida, q.ativo, q.criadoEm, q.atualizadoEm,
            q.idTema, t.nome AS temaNome, q.banca, q.ano, q.dificuldade,
-           COUNT(*) OVER() AS totalRegistros
+           COUNT(*) OVER() AS totalRegistros${colunaPrioridade}
     FROM questoes q
     LEFT JOIN temas t ON t.id = q.idTema
     ${whereClause}
-    ORDER BY q.${coluna} ${dir}
+    ORDER BY ${ordemPrioridade}q.${coluna} ${dir}
     OFFSET @offset ROWS FETCH NEXT @limite ROWS ONLY;
   `);
 
   const total = result.recordset[0]?.totalRegistros || 0;
-  const registros = result.recordset.map(({ totalRegistros, ...q }) => q);
+  const registros = result.recordset.map(({ totalRegistros, jaRespondidaPeloUsuario, ...q }) => q);
 
   return {
     registros,

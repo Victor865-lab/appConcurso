@@ -124,6 +124,7 @@ const listagemQuestoesRules = [
   query('idTema').optional().isInt({ min: 1 }).withMessage('idTema inválido.'),
   query('ano').optional().isInt({ min: 1900, max: 2100 }).withMessage('Ano inválido.'),
   query('dificuldade').optional().isIn(['facil', 'medio', 'dificil']).withMessage('Dificuldade inválida.'),
+  query('priorizarNaoRespondidas').optional().isBoolean().withMessage('priorizarNaoRespondidas deve ser verdadeiro ou falso.'),
 ];
 
 /* ================= ALTERNATIVAS ================= */

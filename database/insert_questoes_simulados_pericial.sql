@@ -3,6 +3,9 @@
 -- IMPORTANTE: conteudo autoral/nao-oficial (nao sao provas de bancas reais) -> banca e ano ficam NULL.
 -- Gabarito determinado por analise tecnica propria (PDFs de origem nao continham gabarito).
 
+USE ConcursosDB;
+GO
+
 IF NOT EXISTS (SELECT 1 FROM temas WHERE nome = N'Tipos de Luzes')
     INSERT INTO temas (nome) VALUES (N'Tipos de Luzes');
 IF NOT EXISTS (SELECT 1 FROM temas WHERE nome = N'Balanço de Branco')

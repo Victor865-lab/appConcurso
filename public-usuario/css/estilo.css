@@ -48,24 +48,28 @@ h1, h2, h3, .fonte-display { font-family: var(--fonte-display); letter-spacing: 
 /* ============ LOGIN ============ */
 
 .pagina-login {
-  min-height: 100vh; display: flex; align-items: center; justify-content: center;
-  background:
-    radial-gradient(circle at 12% 15%, rgba(20,184,166,0.14), transparent 42%),
-    radial-gradient(circle at 88% 85%, rgba(249,115,22,0.12), transparent 45%),
-    var(--bg);
+  min-height: 100vh; width: 100%; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 1.5rem;
+  padding: 2rem 1rem;
+  background: #000c1e;
   position: relative; overflow: hidden;
 }
-.chama-decorativa { position: absolute; bottom: -80px; left: -60px; font-size: 300px; color: var(--laranja-500); opacity: 0.06; transform: rotate(-8deg); }
-
-.login-container { width: 100%; max-width: 420px; padding: 1rem; z-index: 1; }
-.login-card { background: var(--surface); border: 1px solid var(--borda); border-radius: 18px; padding: 2.25rem; box-shadow: var(--sombra); }
-.login-cabecalho { text-align: center; margin-bottom: 1.75rem; }
-.login-selo {
-  display: inline-flex; align-items: center; gap: 0.35rem;
-  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
-  color: var(--teal-700); background: rgba(15,118,110,0.1); border: 1px solid rgba(15,118,110,0.25);
-  padding: 0.3rem 0.7rem; border-radius: 999px; margin-bottom: 0.9rem;
+.pagina-login::before {
+  content: ''; position: absolute; top: 6%; left: 50%; transform: translateX(-50%);
+  width: 560px; height: 560px; max-width: 95vw; max-height: 95vw;
+  background: radial-gradient(circle, rgba(245,158,11,0.16), transparent 70%);
+  pointer-events: none;
 }
+
+.login-logo {
+  position: relative; z-index: 1; display: block; width: min(320px, 68vw); height: auto;
+  -webkit-mask-image: radial-gradient(ellipse farthest-corner at 50% 50%, #000 62%, transparent 96%);
+  mask-image: radial-gradient(ellipse farthest-corner at 50% 50%, #000 62%, transparent 96%);
+}
+
+.login-container { position: relative; z-index: 1; width: 100%; max-width: 420px; padding: 0; }
+.login-card { background: var(--surface); border: 1px solid var(--borda); border-radius: 18px; padding: 2.25rem; box-shadow: 0 24px 60px rgba(0,0,0,0.45); }
+.login-cabecalho { text-align: center; margin-bottom: 1.75rem; }
 .login-cabecalho h1 { font-size: 1.6rem; margin-bottom: 0.35rem; }
 .login-cabecalho p { color: var(--texto-muted); font-size: 0.9rem; margin: 0; }
 
@@ -76,6 +80,11 @@ h1, h2, h3, .fonte-display { font-family: var(--fonte-display); letter-spacing: 
 .btn-entrar:hover { background: linear-gradient(135deg, var(--teal-700), #0B5E58); color: #fff; }
 .login-rodape { text-align: center; margin-top: 1.25rem; font-size: 0.85rem; color: var(--texto-muted); }
 .login-rodape a { color: var(--laranja-600); font-weight: 600; text-decoration: none; }
+
+@media (max-height: 760px) {
+  .pagina-login { gap: 0.85rem; padding: 1.25rem 1rem; }
+  .login-logo { width: min(180px, 45vw); }
+}
 
 /* ============ APP SHELL ============ */
 

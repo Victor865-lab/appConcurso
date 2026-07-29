@@ -7,6 +7,9 @@
 -- resposta foi inventada. Questoes que exigiam ver uma imagem nao fornecida
 -- pelo PDF, ou fora do escopo tecnico de fotografia, foram excluidas.
 
+USE ConcursosDB;
+GO
+
 IF NOT EXISTS (SELECT 1 FROM temas WHERE nome = N'Triângulo de Exposição')
     INSERT INTO temas (nome) VALUES (N'Triângulo de Exposição');
 IF NOT EXISTS (SELECT 1 FROM temas WHERE nome = N'ISO')

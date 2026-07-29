@@ -60,7 +60,7 @@ async function buscarPorId(req, res) {
  */
 async function listar(req, res) {
   try {
-    const { pagina, limite, ativo, respondida, referencia, palavraChave, idTema, banca, ano, dificuldade, ordenarPor, direcao } = req.query;
+    const { pagina, limite, ativo, respondida, referencia, palavraChave, idTema, banca, ano, dificuldade, ordenarPor, direcao, priorizarNaoRespondidas } = req.query;
 
     const resultado = await questaoModel.listar({
       pagina: pagina ? Number(pagina) : 1,
@@ -75,6 +75,11 @@ async function listar(req, res) {
       dificuldade,
       ordenarPor,
       direcao,
+      // Só faz sentido "priorizar não respondidas" por usuário quando o
+      // próprio chamador pede (feed do aluno) — o painel admin continua
+      // com a ordenação padrão, sem isso enviesar por quem está logado.
+      idUsuarioAtual: priorizarNaoRespondidas === 'true' ? req.usuario.id : undefined,
+      priorizarNaoRespondidas: priorizarNaoRespondidas === 'true',
     });
 
     return ok(res, resultado, 'Questões listadas com sucesso.');

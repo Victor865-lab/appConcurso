@@ -119,7 +119,10 @@ async function carregarProximaPaginaMapa() {
   const loading = document.getElementById('mapa-loading');
   loading.classList.remove('d-none');
 
-  const params = new URLSearchParams({ pagina: ESTADO_MAPA.pagina, limite: ESTADO_MAPA.limite, ativo: 'true' });
+  const params = new URLSearchParams({
+    pagina: ESTADO_MAPA.pagina, limite: ESTADO_MAPA.limite, ativo: 'true',
+    priorizarNaoRespondidas: 'true',
+  });
   if (ESTADO_MAPA.busca) params.set('palavraChave', ESTADO_MAPA.busca);
   if (ESTADO_MAPA.idTema) params.set('idTema', ESTADO_MAPA.idTema);
   if (ESTADO_MAPA.banca) params.set('banca', ESTADO_MAPA.banca);
