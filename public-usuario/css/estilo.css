@@ -48,42 +48,138 @@ h1, h2, h3, .fonte-display { font-family: var(--fonte-display); letter-spacing: 
 /* ============ LOGIN ============ */
 
 .pagina-login {
+  --bl-navy-950: #0A1628;
+  --bl-navy-900: #0E1E36;
+  --bl-navy-800: #152A4A;
+  --bl-gold-300: #F0C766;
+  --bl-gold-500: #D9A335;
+  --bl-ink-100: #F4F6F8;
+  --bl-muted: #8FA0BC;
   min-height: 100vh; width: 100%; display: flex; flex-direction: column;
   align-items: center; justify-content: center; gap: 1.5rem;
-  padding: 2rem 1rem;
-  background: #000c1e;
+  padding: 2.5rem 1rem;
+  background:
+    radial-gradient(circle at 92% 8%, rgba(217,163,53,0.16), transparent 40%),
+    radial-gradient(circle at 6% 96%, rgba(217,163,53,0.08), transparent 42%),
+    linear-gradient(115deg, var(--bl-navy-900) 0%, var(--bl-navy-950) 60%, #060b16 100%);
   position: relative; overflow: hidden;
-}
-.pagina-login::before {
-  content: ''; position: absolute; top: 6%; left: 50%; transform: translateX(-50%);
-  width: 560px; height: 560px; max-width: 95vw; max-height: 95vw;
-  background: radial-gradient(circle, rgba(245,158,11,0.16), transparent 70%);
-  pointer-events: none;
+  font-family: 'Inter', sans-serif;
 }
 
-.login-logo {
-  position: relative; z-index: 1; display: block; width: min(320px, 68vw); height: auto;
-  -webkit-mask-image: radial-gradient(ellipse farthest-corner at 50% 50%, #000 62%, transparent 96%);
-  mask-image: radial-gradient(ellipse farthest-corner at 50% 50%, #000 62%, transparent 96%);
+.pagina-login-textura {
+  position: absolute; inset: 0; z-index: 0;
+  opacity: 0.05; mix-blend-mode: overlay; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-.login-container { position: relative; z-index: 1; width: 100%; max-width: 420px; padding: 0; }
-.login-card { background: var(--surface); border: 1px solid var(--borda); border-radius: 18px; padding: 2.25rem; box-shadow: 0 24px 60px rgba(0,0,0,0.45); }
+/* ===== Assinatura ambiente (íris de diafragma → alvo), tela cheia ===== */
+.pagina-login-assinatura {
+  position: absolute; z-index: 0; pointer-events: none;
+  top: 50%; right: -14%;
+  width: min(900px, 72vw); height: min(900px, 72vw);
+  transform: translateY(-50%);
+  opacity: 0.55;
+}
+.pagina-login-assinatura svg { width: 100%; height: 100%; }
+.bl-aro { fill: none; stroke: var(--bl-muted); opacity: 0.16; }
+.bl-aro-gold { fill: none; stroke: var(--bl-gold-500); opacity: 0.5; }
+.bl-lamina { fill: var(--bl-navy-800); stroke: rgba(217,163,53,0.35); stroke-width: 1; opacity: 0.55; }
+.bl-ponto { fill: var(--bl-gold-500); opacity: 0.55; }
+.bl-linha { stroke: var(--bl-gold-500); stroke-width: 1; opacity: 0.28; fill: none; }
+.bl-flecha { stroke: var(--bl-gold-300); stroke-width: 2.5; fill: none; stroke-linecap: round; }
+.bl-flecha-ponta { fill: var(--bl-gold-300); }
+.bl-centro { fill: var(--bl-gold-500); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .pagina-login-assinatura { animation: banner-login-girar 90s linear infinite; }
+}
+@keyframes banner-login-girar {
+  from { transform: translateY(-50%) rotate(0deg); }
+  to { transform: translateY(-50%) rotate(360deg); }
+}
+
+.login-container {
+  position: relative; z-index: 1; width: 100%; max-width: 420px; padding: 0;
+  display: flex; flex-direction: column; align-items: center; gap: 1.25rem;
+}
+
+.login-marca-topo { display: flex; align-items: center; gap: 10px; }
+.login-marca-topo img { width: 32px; height: 32px; object-fit: contain; border-radius: 6px; }
+.login-marca-topo strong {
+  display: block; font-family: 'Space Grotesk', sans-serif; font-weight: 700;
+  font-size: 1rem; letter-spacing: 0.02em; color: var(--bl-ink-100);
+}
+.login-marca-topo strong span { color: var(--bl-gold-500); }
+.login-marca-topo small {
+  display: block; font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--bl-muted); margin-top: 2px;
+}
+
+.login-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 0.66rem; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--bl-gold-300);
+}
+.login-eyebrow::before { content: ''; width: 16px; height: 1px; background: var(--bl-gold-500); }
+
+.login-card {
+  width: 100%;
+  background: rgba(14, 30, 54, 0.55);
+  border: 1px solid rgba(240, 199, 102, 0.18);
+  border-radius: 18px; padding: 2.25rem;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.55);
+  backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+}
 .login-cabecalho { text-align: center; margin-bottom: 1.75rem; }
-.login-cabecalho h1 { font-size: 1.6rem; margin-bottom: 0.35rem; }
-.login-cabecalho p { color: var(--texto-muted); font-size: 0.9rem; margin: 0; }
+.login-cabecalho h1 { font-size: 1.6rem; margin-bottom: 0.35rem; color: var(--bl-ink-100); }
+.login-cabecalho p { color: var(--bl-muted); font-size: 0.9rem; margin: 0; }
 
-.btn-entrar {
-  background: linear-gradient(135deg, var(--teal-600), var(--teal-700));
-  border: none; color: #fff; font-weight: 700; padding: 0.6rem; border-radius: 10px;
+.pagina-login .form-label { color: var(--bl-ink-100); }
+.pagina-login .form-control { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.15); color: var(--bl-ink-100); }
+.pagina-login .form-control::placeholder { color: rgba(143,160,188,0.65); }
+.pagina-login .form-control:focus {
+  background: rgba(255,255,255,0.08); border-color: var(--bl-gold-500); color: var(--bl-ink-100);
+  box-shadow: 0 0 0 0.2rem rgba(217,163,53,0.25);
 }
-.btn-entrar:hover { background: linear-gradient(135deg, var(--teal-700), #0B5E58); color: #fff; }
-.login-rodape { text-align: center; margin-top: 1.25rem; font-size: 0.85rem; color: var(--texto-muted); }
-.login-rodape a { color: var(--laranja-600); font-weight: 600; text-decoration: none; }
+.pagina-login .input-group-text { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.15); color: var(--bl-gold-300); }
+.pagina-login .btn-outline-secondary { border-color: rgba(255,255,255,0.15); color: var(--bl-muted); }
+.pagina-login .btn-outline-secondary:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15); color: var(--bl-ink-100); }
+
+.pagina-login .btn-entrar {
+  background: linear-gradient(135deg, var(--bl-gold-500), var(--bl-gold-300));
+  border: none; color: var(--bl-navy-950); font-weight: 700; padding: 0.6rem; border-radius: 10px;
+}
+.pagina-login .btn-entrar:hover { background: linear-gradient(135deg, var(--bl-gold-300), var(--bl-gold-500)); color: var(--bl-navy-950); }
+
+.login-rodape { text-align: center; margin-top: 1.25rem; font-size: 0.85rem; color: var(--bl-muted); }
+.login-rodape a { color: var(--bl-gold-300); font-weight: 600; text-decoration: none; }
+
+.link-esqueci-senha { font-size: 0.8rem; color: var(--bl-muted); text-decoration: none; }
+.link-esqueci-senha:hover { color: var(--bl-gold-300); text-decoration: underline; }
+
+.login-leituras { display: flex; gap: 28px; }
+.login-leitura { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.login-leitura span:first-child { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 1rem; color: var(--bl-ink-100); }
+.login-leitura span:last-child { font-size: 0.6rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--bl-muted); }
+
+/* Modais (cadastro / esqueci senha) seguem o mesmo tema escuro */
+.pagina-login .modal-content { background: var(--bl-navy-900); border: 1px solid rgba(240,199,102,0.18); color: var(--bl-ink-100); }
+.pagina-login .modal-header { border-bottom-color: rgba(255,255,255,0.1); }
+.pagina-login .modal-title { color: var(--bl-ink-100); }
+.pagina-login .btn-close { filter: invert(1) grayscale(100%) brightness(200%); }
+.pagina-login .text-muted { color: var(--bl-muted) !important; }
+
+@media (max-width: 860px) {
+  .pagina-login-assinatura { width: min(560px, 90vw); height: min(560px, 90vw); opacity: 0.4; top: 8%; right: 50%; transform: translateX(50%); }
+}
+@media (prefers-reduced-motion: no-preference) and (max-width: 860px) {
+  .pagina-login-assinatura { animation: none; }
+}
 
 @media (max-height: 760px) {
-  .pagina-login { gap: 0.85rem; padding: 1.25rem 1rem; }
-  .login-logo { width: min(180px, 45vw); }
+  .pagina-login { gap: 0.9rem; padding: 1.25rem 1rem; }
+  .pagina-login-assinatura { width: min(360px, 70vw); height: min(360px, 70vw); opacity: 0.3; }
+  .login-leituras { display: none; }
 }
 
 /* ============ APP SHELL ============ */

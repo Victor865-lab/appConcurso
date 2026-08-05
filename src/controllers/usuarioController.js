@@ -16,15 +16,19 @@ const SALT_ROUNDS = 10;
 
 async function cadastrar(req, res) {
   try {
-    const { nome, senha } = req.body;
+    const { nome, email, senha } = req.body;
 
-    const existente = await usuarioModel.buscarPorNome(nome);
-    if (existente) {
+    const existenteNome = await usuarioModel.buscarPorNome(nome);
+    if (existenteNome) {
       return fail(res, 'Já existe um usuário cadastrado com este nome.', 409);
+    }
+    const existenteEmail = await usuarioModel.buscarPorEmail(email);
+    if (existenteEmail) {
+      return fail(res, 'Já existe um usuário cadastrado com este e-mail.', 409);
     }
 
     const senhaHash = await bcrypt.hash(senha, SALT_ROUNDS);
-    const usuario = await usuarioModel.criar({ nome, senhaHash });
+    const usuario = await usuarioModel.criar({ nome, email, senhaHash });
 
     return created(res, usuario, 'Usuário cadastrado com sucesso.');
   } catch (err) {

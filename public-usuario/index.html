@@ -7,14 +7,64 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/estilo.css">
 </head>
 <body class="pagina-login">
 
-  <img src="img/logo-fundo.jpg" alt="Acerta AI — O alvo é a sua aprovação" class="login-logo">
+  <div class="pagina-login-textura"></div>
+
+  <div class="pagina-login-assinatura" aria-hidden="true">
+    <svg viewBox="0 0 400 400">
+      <circle class="bl-aro" cx="200" cy="200" r="180"/>
+      <circle class="bl-aro" cx="200" cy="200" r="140"/>
+      <circle class="bl-aro-gold" cx="200" cy="200" r="100"/>
+      <circle class="bl-aro" cx="200" cy="200" r="60"/>
+
+      <line class="bl-aro" x1="200" y1="6" x2="200" y2="42"/>
+      <line class="bl-aro" x1="200" y1="358" x2="200" y2="394"/>
+      <line class="bl-aro" x1="6" y1="200" x2="42" y2="200"/>
+      <line class="bl-aro" x1="358" y1="200" x2="394" y2="200"/>
+
+      <g transform="translate(200,200)">
+        <polygon class="bl-lamina" points="0.0,-38.0 34.0,-58.0 20.0,-12.0"/>
+        <polygon class="bl-lamina" points="26.9,-26.9 65.1,-17.0 22.6,5.7"/>
+        <polygon class="bl-lamina" points="38.0,-0.0 58.0,34.0 12.0,20.0"/>
+        <polygon class="bl-lamina" points="26.9,26.9 17.0,65.1 -5.7,22.6"/>
+        <polygon class="bl-lamina" points="0.0,38.0 -34.0,58.0 -20.0,12.0"/>
+        <polygon class="bl-lamina" points="-26.9,26.9 -65.1,17.0 -22.6,-5.7"/>
+        <polygon class="bl-lamina" points="-38.0,0.0 -58.0,-34.0 -12.0,-20.0"/>
+        <polygon class="bl-lamina" points="-26.9,-26.9 -17.0,-65.1 5.7,-22.6"/>
+      </g>
+
+      <g class="bl-linha">
+        <path d="M 240 130 L 268 108 L 296 118"/>
+        <path d="M 250 150 L 300 150 L 322 168"/>
+        <path d="M 236 168 L 280 190"/>
+      </g>
+      <circle class="bl-ponto" cx="268" cy="108" r="4"/>
+      <circle class="bl-ponto" cx="296" cy="118" r="3"/>
+      <circle class="bl-ponto" cx="322" cy="168" r="3.5"/>
+      <circle class="bl-ponto" cx="280" cy="190" r="3"/>
+
+      <line class="bl-flecha" x1="330" y1="70" x2="212" y2="188"/>
+      <polygon class="bl-flecha-ponta" points="330,70 314,72 328,86"/>
+
+      <circle class="bl-centro" cx="200" cy="200" r="7"/>
+    </svg>
+  </div>
 
   <main class="login-container">
+    <div class="login-marca-topo">
+      <img src="img/logo-fundo.jpg" alt="">
+      <div>
+        <strong>ACERTA<span>AI</span></strong>
+        <small>O alvo é a sua aprovação</small>
+      </div>
+    </div>
+
+    <span class="login-eyebrow">Preparação para fotógrafo de concursos</span>
+
     <div class="login-card">
       <div class="login-cabecalho">
         <h1>Bora estudar hoje?</h1>
@@ -23,10 +73,10 @@
 
       <form id="form-login" novalidate>
         <div class="mb-3">
-          <label for="nome" class="form-label">Usuário</label>
+          <label for="nome" class="form-label">E-mail</label>
           <div class="input-group">
-            <span class="input-group-text"><i class="bi bi-person"></i></span>
-            <input type="text" class="form-control" id="nome" name="nome" autocomplete="username" required>
+            <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+            <input type="text" class="form-control" id="nome" name="nome" placeholder="seu@email.com" autocomplete="username" required>
           </div>
         </div>
 
@@ -38,6 +88,9 @@
             <button class="btn btn-outline-secondary" type="button" id="btn-ver-senha" tabindex="-1">
               <i class="bi bi-eye"></i>
             </button>
+          </div>
+          <div class="text-end mt-1">
+            <a href="#" id="link-esqueci-senha" class="link-esqueci-senha">Esqueci minha senha</a>
           </div>
         </div>
 
@@ -52,6 +105,12 @@
       <p class="login-rodape">
         Ainda não tem conta? <a href="#" id="link-cadastro">Criar conta grátis</a>
       </p>
+    </div>
+
+    <div class="login-leituras">
+      <div class="login-leitura"><span>1000+</span><span>Questões reais</span></div>
+      <div class="login-leitura"><span>22+</span><span>Temas cobertos</span></div>
+      <div class="login-leitura"><span>f/1.0</span><span>Foco total</span></div>
     </div>
   </main>
 
@@ -69,11 +128,40 @@
               <input type="text" class="form-control" id="cad-nome" minlength="3" required>
             </div>
             <div class="mb-3">
+              <label class="form-label">E-mail</label>
+              <input type="email" class="form-control" id="cad-email" required>
+            </div>
+            <div class="mb-3">
               <label class="form-label">Senha (mínimo 8 caracteres)</label>
               <input type="password" class="form-control" id="cad-senha" minlength="8" required>
             </div>
             <div id="alerta-cadastro" class="alert alert-danger d-none"></div>
             <button type="submit" class="btn btn-entrar w-100">Criar conta</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalEsqueciSenha" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Redefinir senha</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <p class="text-muted small">Informe o e-mail da sua conta. Se ele estiver cadastrado, você vai receber um link para criar uma nova senha.</p>
+          <form id="form-esqueci-senha">
+            <div class="mb-3">
+              <label class="form-label">E-mail</label>
+              <input type="email" class="form-control" id="esqueci-email" required>
+            </div>
+            <div id="alerta-esqueci-senha" class="alert d-none"></div>
+            <button type="submit" class="btn btn-entrar w-100" id="btn-esqueci-senha">
+              <span class="spinner-border spinner-border-sm d-none" id="spinner-esqueci-senha"></span>
+              <span id="texto-esqueci-senha">Enviar link de redefinição</span>
+            </button>
           </form>
         </div>
       </div>

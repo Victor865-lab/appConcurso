@@ -30,6 +30,11 @@ const usuarioCadastroRules = [
     .trim()
     .notEmpty().withMessage('O nome é obrigatório.')
     .isLength({ min: 3, max: 150 }).withMessage('O nome deve ter entre 3 e 150 caracteres.'),
+  body('email')
+    .trim()
+    .notEmpty().withMessage('O e-mail é obrigatório.')
+    .isEmail().withMessage('Informe um e-mail válido.')
+    .isLength({ max: 255 }).withMessage('O e-mail deve ter no máximo 255 caracteres.'),
   body('senha')
     .notEmpty().withMessage('A senha é obrigatória.')
     .isLength({ min: 8 }).withMessage('A senha deve ter no mínimo 8 caracteres.'),
@@ -50,8 +55,19 @@ const trocaSenhaRules = [
     .isLength({ min: 8 }).withMessage('A nova senha deve ter no mínimo 8 caracteres.'),
 ];
 
+const solicitarRedefinicaoSenhaRules = [
+  body('email').trim().notEmpty().withMessage('Informe seu e-mail.').isEmail().withMessage('Informe um e-mail válido.'),
+];
+
+const redefinirSenhaRules = [
+  body('token').trim().notEmpty().withMessage('Link de redefinição inválido.'),
+  body('novaSenha')
+    .notEmpty().withMessage('Informe a nova senha.')
+    .isLength({ min: 8 }).withMessage('A nova senha deve ter no mínimo 8 caracteres.'),
+];
+
 const loginRules = [
-  body('nome').trim().notEmpty().withMessage('Informe o nome de usuário.'),
+  body('nome').trim().notEmpty().withMessage('Informe seu e-mail ou usuário.'),
   body('senha').notEmpty().withMessage('Informe a senha.'),
 ];
 
@@ -186,6 +202,8 @@ module.exports = {
   usuarioAtualizacaoRules,
   trocaSenhaRules,
   loginRules,
+  solicitarRedefinicaoSenhaRules,
+  redefinirSenhaRules,
   questaoCadastroRules,
   questaoAtualizacaoRules,
   listagemQuestoesRules,

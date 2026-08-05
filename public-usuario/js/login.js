@@ -50,6 +50,45 @@ document.addEventListener('DOMContentLoaded', () => {
     modalCadastro.show();
   });
 
+  const linkEsqueciSenha = document.getElementById('link-esqueci-senha');
+  const modalEsqueciSenha = new bootstrap.Modal(document.getElementById('modalEsqueciSenha'));
+  linkEsqueciSenha.addEventListener('click', (e) => {
+    e.preventDefault();
+    modalEsqueciSenha.show();
+  });
+
+  const formEsqueciSenha = document.getElementById('form-esqueci-senha');
+  const alertaEsqueciSenha = document.getElementById('alerta-esqueci-senha');
+  const btnEsqueciSenha = document.getElementById('btn-esqueci-senha');
+  const spinnerEsqueciSenha = document.getElementById('spinner-esqueci-senha');
+  const textoEsqueciSenha = document.getElementById('texto-esqueci-senha');
+
+  formEsqueciSenha.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    alertaEsqueciSenha.classList.add('d-none');
+
+    const email = document.getElementById('esqueci-email').value.trim();
+
+    btnEsqueciSenha.disabled = true;
+    spinnerEsqueciSenha.classList.remove('d-none');
+    textoEsqueciSenha.textContent = 'Enviando...';
+
+    try {
+      const resposta = await API.post('/auth/esqueci-senha', { email });
+      alertaEsqueciSenha.className = 'alert alert-success';
+      alertaEsqueciSenha.textContent = resposta.mensagem;
+      formEsqueciSenha.reset();
+    } catch (err) {
+      alertaEsqueciSenha.className = 'alert alert-danger';
+      alertaEsqueciSenha.textContent = err.detalhes ? err.detalhes.map((e) => e.mensagem).join(' ') : err.message;
+    } finally {
+      alertaEsqueciSenha.classList.remove('d-none');
+      btnEsqueciSenha.disabled = false;
+      spinnerEsqueciSenha.classList.add('d-none');
+      textoEsqueciSenha.textContent = 'Enviar link de redefinição';
+    }
+  });
+
   const formCadastro = document.getElementById('form-cadastro');
   const alertaCadastro = document.getElementById('alerta-cadastro');
 
@@ -58,10 +97,11 @@ document.addEventListener('DOMContentLoaded', () => {
     alertaCadastro.classList.add('d-none');
 
     const nome = document.getElementById('cad-nome').value.trim();
+    const email = document.getElementById('cad-email').value.trim();
     const senha = document.getElementById('cad-senha').value;
 
     try {
-      await API.post('/usuarios', { nome, senha });
+      await API.post('/usuarios', { nome, email, senha });
       modalCadastro.hide();
       mostrarToast('Conta criada com sucesso! Faça login para começar.', 'sucesso');
       formCadastro.reset();

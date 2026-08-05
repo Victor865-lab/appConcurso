@@ -6,16 +6,17 @@
 
 const { sql, getPool } = require('../config/database');
 
-async function criar({ nome, senhaHash }) {
+async function criar({ nome, email, senhaHash }) {
   const pool = await getPool();
   const result = await pool
     .request()
     .input('nome', sql.NVarChar(150), nome)
+    .input('email', sql.NVarChar(255), email || null)
     .input('senhaHash', sql.NVarChar(255), senhaHash)
     .query(`
-      INSERT INTO usuarios (nome, senhaHash)
-      OUTPUT INSERTED.id, INSERTED.nome, INSERTED.criadoEm
-      VALUES (@nome, @senhaHash);
+      INSERT INTO usuarios (nome, email, senhaHash)
+      OUTPUT INSERTED.id, INSERTED.nome, INSERTED.email, INSERTED.criadoEm
+      VALUES (@nome, @email, @senhaHash);
     `);
   return result.recordset[0];
 }
@@ -50,9 +51,39 @@ async function buscarPorNome(nome) {
     .request()
     .input('nome', sql.NVarChar(150), nome)
     .query(`
-      SELECT id, nome, senhaHash, role, criadoEm
+      SELECT id, nome, email, senhaHash, role, criadoEm
       FROM usuarios
       WHERE nome = @nome;
+    `);
+  return result.recordset[0] || null;
+}
+
+async function buscarPorEmail(email) {
+  const pool = await getPool();
+  const result = await pool
+    .request()
+    .input('email', sql.NVarChar(255), email)
+    .query(`
+      SELECT id, nome, email, senhaHash, role, criadoEm
+      FROM usuarios
+      WHERE email = @email;
+    `);
+  return result.recordset[0] || null;
+}
+
+/**
+ * Login aceita tanto o nome de usuário quanto o e-mail no mesmo campo —
+ * contas antigas (sem e-mail cadastrado) continuam entrando pelo nome.
+ */
+async function buscarPorNomeOuEmail(identificador) {
+  const pool = await getPool();
+  const result = await pool
+    .request()
+    .input('identificador', sql.NVarChar(255), identificador)
+    .query(`
+      SELECT id, nome, email, senhaHash, role, criadoEm
+      FROM usuarios
+      WHERE nome = @identificador OR email = @identificador;
     `);
   return result.recordset[0] || null;
 }
@@ -108,6 +139,8 @@ module.exports = {
   listarTodos,
   buscarPorId,
   buscarPorNome,
+  buscarPorEmail,
+  buscarPorNomeOuEmail,
   atualizar,
   atualizarSenha,
   registrarAtividade,

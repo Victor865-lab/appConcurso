@@ -22,10 +22,38 @@ GO
 CREATE TABLE dbo.usuarios (
     id            INT IDENTITY(1,1) PRIMARY KEY,
     nome          NVARCHAR(150)   NOT NULL,
+    email         NVARCHAR(255)   NULL,
     senhaHash     NVARCHAR(255)   NOT NULL,
     criadoEm      DATETIME2       NOT NULL DEFAULT SYSUTCDATETIME(),
     atualizadoEm  DATETIME2       NULL,
     CONSTRAINT UQ_usuarios_nome UNIQUE (nome)
+);
+GO
+
+-- Índice único filtrado: e-mail é opcional (contas antigas podem não ter),
+-- mas quando presente não pode se repetir entre contas.
+CREATE UNIQUE INDEX UQ_usuarios_email ON dbo.usuarios(email) WHERE email IS NOT NULL;
+GO
+
+/* =========================================================
+   Tabela: redefinicoes_senha
+   Tokens de uso único (com expiração) para o fluxo de
+   "esqueci minha senha" via link enviado por e-mail.
+   ========================================================= */
+IF OBJECT_ID('dbo.redefinicoes_senha', 'U') IS NOT NULL
+    DROP TABLE dbo.redefinicoes_senha;
+GO
+
+CREATE TABLE dbo.redefinicoes_senha (
+    id            INT IDENTITY(1,1) PRIMARY KEY,
+    idUsuario     INT             NOT NULL,
+    token         NVARCHAR(255)   NOT NULL,
+    criadoEm      DATETIME2       NOT NULL DEFAULT SYSUTCDATETIME(),
+    expiraEm      DATETIME2       NOT NULL,
+    usadoEm       DATETIME2       NULL,
+    CONSTRAINT FK_redefinicoes_senha_usuario FOREIGN KEY (idUsuario)
+        REFERENCES dbo.usuarios(id) ON DELETE CASCADE,
+    CONSTRAINT UQ_redefinicoes_senha_token UNIQUE (token)
 );
 GO
 
