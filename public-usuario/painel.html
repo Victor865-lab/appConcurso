@@ -24,9 +24,9 @@
     </div>
 
     <nav class="sidebar-nav">
-      <button class="nav-item ativo" data-secao="dashboard"><i class="bi bi-speedometer2"></i> Painel</button>
+      <button class="nav-item ativo" data-secao="dashboard"><i class="bi bi-speedometer2"></i> Meu painel</button>
       <button class="nav-item" data-secao="mapeamento"><i class="bi bi-map"></i> Questões</button>
-      <button class="nav-item" data-secao="simulados"><i class="bi bi-pencil-square"></i> Simulados</button>
+      <button class="nav-item" data-secao="simulados"><i class="bi bi-pencil-square"></i> Gerar simulado</button>
       <button class="nav-item nav-item-premium" data-secao="assinatura"><span class="nav-item-coroa">👑</span> Assinatura Premium</button>
     </nav>
 
@@ -52,7 +52,7 @@
       <button class="btn-menu-mobile d-lg-none" id="btn-menu-mobile"><i class="bi bi-list"></i></button>
       <div class="topbar-titulo">
         <span class="topbar-eyebrow" id="titulo-eyebrow">Sua jornada</span>
-        <h1 id="titulo-secao">Painel</h1>
+        <h1 id="titulo-secao">Meu painel</h1>
       </div>
       <div class="topbar-streak" title="Sequência de dias seguidos estudando">
         <i class="bi bi-fire"></i>
@@ -169,15 +169,15 @@
           <div class="painel-card">
             <h2>Gerar novo simulado</h2>
             <form id="form-gerar-simulado" class="row g-3 align-items-end">
-              <div class="col-md-3">
+              <div class="col-md-2">
                 <label class="form-label">Tema</label>
                 <select class="form-select" id="sim-tema"><option value="">Qualquer</option></select>
               </div>
-              <div class="col-md-3">
+              <div class="col-md-2">
                 <label class="form-label">Banca</label>
                 <select class="form-select" id="sim-banca"><option value="">Qualquer</option></select>
               </div>
-              <div class="col-md-3">
+              <div class="col-md-2">
                 <label class="form-label">Dificuldade</label>
                 <select class="form-select" id="sim-dificuldade">
                   <option value="">Qualquer</option>
@@ -190,7 +190,11 @@
                 <label class="form-label">Quantidade</label>
                 <input type="number" class="form-control" id="sim-quantidade" value="10" min="1" max="50">
               </div>
-              <div class="col-md-1">
+              <div class="col-md-2">
+                <label class="form-label"><i class="bi bi-stopwatch"></i> Tempo (min)</label>
+                <input type="number" class="form-control" id="sim-tempo" placeholder="Sem limite" min="1" max="300">
+              </div>
+              <div class="col-md-2">
                 <button type="submit" class="btn btn-entrar w-100" id="btn-gerar-simulado">
                   <i class="bi bi-play-fill"></i>
                 </button>
@@ -215,7 +219,10 @@
           <div class="painel-card">
             <div class="d-flex justify-content-between align-items-center mb-3">
               <h2 class="mb-0">Simulado em andamento</h2>
-              <span class="badge-nivel" id="execucao-progresso">0 / 0 respondidas</span>
+              <div class="d-flex align-items-center gap-2">
+                <span class="badge-tempo d-none" id="execucao-tempo"><i class="bi bi-stopwatch"></i> <span id="execucao-tempo-valor"></span></span>
+                <span class="badge-nivel" id="execucao-progresso">0 / 0 respondidas</span>
+              </div>
             </div>
             <div id="lista-questoes-execucao"></div>
             <div class="d-flex justify-content-between mt-3">

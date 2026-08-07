@@ -32,9 +32,9 @@ function configurarAlturaTopbar() {
 }
 
 const TITULOS_SECAO = {
-  dashboard: { eyebrow: 'Sua jornada', titulo: 'Painel' },
+  dashboard: { eyebrow: 'Sua jornada', titulo: 'Meu painel' },
   mapeamento: { eyebrow: 'Explore o banco de questões', titulo: 'Questões' },
-  simulados: { eyebrow: 'Treine sob pressão', titulo: 'Simulados' },
+  simulados: { eyebrow: 'Treine sob pressão', titulo: 'Gerar simulado' },
   assinatura: { eyebrow: 'Desbloqueie todo o potencial', titulo: 'Assinatura Premium' },
 };
 

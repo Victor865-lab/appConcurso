@@ -6,6 +6,8 @@
 
 let simuladoEmExecucao = null;
 const respostasSimulado = {};
+let cronometroSimuladoId = null;
+let cronometroFimEm = null; // timestamp (ms) em que o tempo definido se esgota
 
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('form-gerar-simulado').addEventListener('submit', gerarSimulado);
@@ -72,13 +74,16 @@ async function gerarSimulado(e) {
     dificuldade: document.getElementById('sim-dificuldade').value || null,
     quantidade: Number(document.getElementById('sim-quantidade').value) || 10,
   };
+  // Tempo é só um cronômetro de referência pro aluno — não é enviado
+  // pro backend nem afeta a geração/correção do simulado.
+  const tempoMinutos = Number(document.getElementById('sim-tempo').value) || null;
 
   const btn = document.getElementById('btn-gerar-simulado');
   btn.disabled = true;
 
   try {
     const resposta = await API.post('/simulados', payload);
-    iniciarExecucao(resposta.dados);
+    iniciarExecucao(resposta.dados, tempoMinutos);
   } catch (err) {
     alerta.textContent = err.detalhes ? err.detalhes.map((e) => e.mensagem).join(' ') : err.message;
     alerta.classList.remove('d-none');
@@ -96,7 +101,7 @@ async function retomarSimulado(id) {
   }
 }
 
-function iniciarExecucao(simulado) {
+function iniciarExecucao(simulado, tempoMinutos) {
   simuladoEmExecucao = simulado;
   Object.keys(respostasSimulado).forEach((k) => delete respostasSimulado[k]);
 
@@ -117,7 +122,57 @@ function iniciarExecucao(simulado) {
   `).join('');
 
   atualizarProgressoExecucao();
+  iniciarCronometroSimulado(tempoMinutos);
   mostrarTelaSimulados('execucao');
+}
+
+/**
+ * Cronômetro apenas informativo: quando o tempo definido pelo aluno
+ * esgota, o badge fica vermelho avisando "Tempo esgotado", mas nada é
+ * bloqueado — o simulado continua liberado normalmente até o aluno
+ * decidir finalizar.
+ */
+function iniciarCronometroSimulado(tempoMinutos) {
+  pararCronometroSimulado();
+
+  const badge = document.getElementById('execucao-tempo');
+  const valor = document.getElementById('execucao-tempo-valor');
+
+  if (!tempoMinutos) {
+    badge.classList.add('d-none');
+    return;
+  }
+
+  cronometroFimEm = Date.now() + tempoMinutos * 60 * 1000;
+  badge.classList.remove('d-none');
+  badge.classList.remove('badge-tempo-esgotado');
+
+  const atualizar = () => {
+    const restanteMs = cronometroFimEm - Date.now();
+    if (restanteMs <= 0) {
+      valor.textContent = 'Tempo esgotado';
+      badge.classList.add('badge-tempo-esgotado');
+      clearInterval(cronometroSimuladoId);
+      cronometroSimuladoId = null;
+      return;
+    }
+    const totalSegundos = Math.ceil(restanteMs / 1000);
+    const minutos = Math.floor(totalSegundos / 60);
+    const segundos = totalSegundos % 60;
+    valor.textContent = `${minutos}:${String(segundos).padStart(2, '0')}`;
+  };
+
+  atualizar();
+  cronometroSimuladoId = setInterval(atualizar, 1000);
+}
+
+function pararCronometroSimulado() {
+  if (cronometroSimuladoId) {
+    clearInterval(cronometroSimuladoId);
+    cronometroSimuladoId = null;
+  }
+  cronometroFimEm = null;
+  document.getElementById('execucao-tempo')?.classList.add('d-none');
 }
 
 function selecionarAlternativaExecucao(idQuestao, idAlternativa) {
@@ -136,6 +191,7 @@ function atualizarProgressoExecucao() {
 
 function voltarParaListaSimulados() {
   simuladoEmExecucao = null;
+  pararCronometroSimulado();
   mostrarTelaSimulados('inicio');
   carregarHistoricoSimulados();
 }
@@ -168,6 +224,7 @@ async function finalizarSimulado() {
 }
 
 function exibirResultado(resultado) {
+  pararCronometroSimulado();
   document.getElementById('resultado-acertos').textContent = resultado.acertos;
   document.getElementById('resultado-total').textContent = resultado.totalQuestoes;
   document.getElementById('resultado-pontos').textContent = resultado.pontosGanhos;
