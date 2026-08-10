@@ -28,6 +28,7 @@ const ARQUIVOS_INSERT = [
   'insert_questoes_tecnicas_audiovisuais_vunesp.sql',
   'insert_questoes_simulados_pericial.sql',
   'insert_questoes_novas_provas_2026.sql',
+  'insert_questoes_hard.sql',
 ];
 
 async function rodarArquivo(pool, nomeArquivo) {
