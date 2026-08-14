@@ -16,7 +16,10 @@ function getTransporter() {
       service: 'gmail',
       auth: {
         user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_APP_PASSWORD,
+        // Senha de app do Google costuma ser copiada com espaços (formato de
+        // exibição "xxxx xxxx xxxx xxxx"), mas a autenticação SMTP exige a
+        // string sem espaços — removê-los aqui evita falha de credencial.
+        pass: process.env.GMAIL_APP_PASSWORD.replace(/\s+/g, ''),
       },
     });
   }
