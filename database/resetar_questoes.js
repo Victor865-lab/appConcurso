@@ -29,6 +29,7 @@ const ARQUIVOS_INSERT = [
   'insert_questoes_simulados_pericial.sql',
   'insert_questoes_novas_provas_2026.sql',
   'insert_questoes_hard.sql',
+  'insert_questoes_hard_lote2.sql',
 ];
 
 async function rodarArquivo(pool, nomeArquivo) {
