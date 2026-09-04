@@ -81,6 +81,33 @@ async function atualizar(req, res) {
   }
 }
 
+const STATUS_ACESSO_VALIDOS = ['padrao', 'bloqueado', 'premium'];
+
+/**
+ * Exclusivo de admin: define o status de acesso de um usuário específico
+ * ("bloqueado" força exigência de assinatura para ele mesmo com o
+ * sistema liberado globalmente; "premium" libera o acesso dele mesmo
+ * sem assinatura paga). Ver middlewares/verificarAssinatura.js.
+ */
+async function atualizarAcesso(req, res) {
+  try {
+    const { id } = req.params;
+    const { statusAcesso } = req.body;
+
+    if (!STATUS_ACESSO_VALIDOS.includes(statusAcesso)) {
+      return fail(res, 'statusAcesso deve ser "padrao", "bloqueado" ou "premium".', 422);
+    }
+
+    const existente = await usuarioModel.buscarPorId(id);
+    if (!existente) return notFound(res, 'Usuário não encontrado.');
+
+    const atualizado = await usuarioModel.atualizarStatusAcesso(id, statusAcesso);
+    return ok(res, atualizado, 'Status de acesso atualizado com sucesso.');
+  } catch (err) {
+    return serverError(res, 'Erro ao atualizar status de acesso.');
+  }
+}
+
 async function excluir(req, res) {
   try {
     const { id } = req.params;
@@ -96,4 +123,4 @@ async function excluir(req, res) {
   }
 }
 
-module.exports = { cadastrar, listar, buscarPorId, atualizar, excluir };
+module.exports = { cadastrar, listar, buscarPorId, atualizar, atualizarAcesso, excluir };

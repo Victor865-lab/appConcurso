@@ -24,7 +24,7 @@ async function criar({ nome, email, senhaHash }) {
 async function listarTodos() {
   const pool = await getPool();
   const result = await pool.request().query(`
-    SELECT id, nome, role, criadoEm, atualizadoEm, ultimaAtividade,
+    SELECT id, nome, role, statusAcesso, criadoEm, atualizadoEm, ultimaAtividade,
       CASE WHEN ultimaAtividade >= DATEADD(MINUTE, -5, SYSUTCDATETIME()) THEN 1 ELSE 0 END AS online
     FROM usuarios
     ORDER BY nome ASC;
@@ -38,7 +38,7 @@ async function buscarPorId(id) {
     .request()
     .input('id', sql.Int, id)
     .query(`
-      SELECT id, nome, role, criadoEm, atualizadoEm
+      SELECT id, nome, email, role, statusAcesso, criadoEm, atualizadoEm
       FROM usuarios
       WHERE id = @id;
     `);
@@ -117,6 +117,26 @@ async function atualizarSenha(id, senhaHash) {
   return true;
 }
 
+/**
+ * Define o status de acesso administrativo do usuário ("padrao",
+ * "bloqueado" ou "premium" — ver migration_status_acesso.sql). Operação
+ * exclusiva de admin, feita por rota separada da atualização de perfil.
+ */
+async function atualizarStatusAcesso(id, statusAcesso) {
+  const pool = await getPool();
+  const result = await pool
+    .request()
+    .input('id', sql.Int, id)
+    .input('statusAcesso', sql.NVarChar(20), statusAcesso)
+    .query(`
+      UPDATE usuarios
+      SET statusAcesso = @statusAcesso, atualizadoEm = SYSUTCDATETIME()
+      OUTPUT INSERTED.id, INSERTED.nome, INSERTED.statusAcesso, INSERTED.atualizadoEm
+      WHERE id = @id;
+    `);
+  return result.recordset[0] || null;
+}
+
 async function registrarAtividade(id) {
   const pool = await getPool();
   await pool
@@ -143,6 +163,7 @@ module.exports = {
   buscarPorNomeOuEmail,
   atualizar,
   atualizarSenha,
+  atualizarStatusAcesso,
   registrarAtividade,
   excluir,
 };

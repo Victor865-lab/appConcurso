@@ -22,6 +22,7 @@ const simuladoRoutes = require('./routes/simuladoRoutes');
 const rankingRoutes = require('./routes/rankingRoutes');
 const comentarioRoutes = require('./routes/comentarioRoutes');
 const denunciaRoutes = require('./routes/denunciaRoutes');
+const reclamacaoRoutes = require('./routes/reclamacaoRoutes');
 const assinaturaRoutes = require('./routes/assinaturaRoutes');
 const webhookRoutes = require('./routes/webhookRoutes');
 const { errorHandler, rotaNaoEncontrada } = require('./middlewares/errorHandler');
@@ -105,6 +106,7 @@ app.use('/simulados', simuladoRoutes);
 app.use('/ranking', rankingRoutes);
 app.use('/comentarios', comentarioRoutes);
 app.use('/denuncias', denunciaRoutes);
+app.use('/reclamacoes', reclamacaoRoutes);
 app.use('/assinaturas', assinaturaRoutes);
 app.use('/webhooks', webhookRoutes);
 

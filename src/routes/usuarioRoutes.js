@@ -8,6 +8,7 @@ const autorizarAdmin = require('../middlewares/autorizarAdmin');
 const {
   usuarioCadastroRules,
   usuarioAtualizacaoRules,
+  usuarioAcessoRules,
   idParamRule,
   validar,
 } = require('../middlewares/validators');
@@ -30,6 +31,11 @@ router.post('/', limiterCadastro, usuarioCadastroRules, validar, usuarioControll
 router.get('/', autenticar, autorizarAdmin, usuarioController.listar);
 router.get('/:id', autenticar, idParamRule, validar, usuarioController.buscarPorId);
 router.put('/:id', autenticar, usuarioAtualizacaoRules, validar, usuarioController.atualizar);
+
+// Bloquear/conceder premium individualmente é operação exclusiva de admin
+// (diferente do PUT /:id acima, que é self-service e só altera o nome).
+router.put('/:id/acesso', autenticar, autorizarAdmin, usuarioAcessoRules, validar, usuarioController.atualizarAcesso);
+
 router.delete('/:id', autenticar, idParamRule, validar, usuarioController.excluir);
 
 module.exports = router;

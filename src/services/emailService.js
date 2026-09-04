@@ -50,4 +50,42 @@ async function enviarEmailRedefinicaoSenha(destinatario, link) {
   });
 }
 
-module.exports = { enviarEmailRedefinicaoSenha };
+/**
+ * Envia uma reclamação/feedback do painel do usuário para a mesma caixa
+ * de e-mail usada para autenticação (GMAIL_USER) — o admin recebe direto
+ * no Gmail. `replyTo` fica com o e-mail do próprio usuário (quando ele
+ * tiver um cadastrado) para o admin poder responder diretamente.
+ */
+async function enviarReclamacao({ idUsuario, nomeUsuario, emailUsuario, mensagem }) {
+  // Remove quebras de linha do nome/e-mail antes de usá-los em cabeçalhos
+  // do e-mail (from/replyTo) — evita injeção de cabeçalho SMTP a partir
+  // de dado que, em teoria, o próprio usuário poderia ter cadastrado.
+  const nomeSeguro = String(nomeUsuario || 'Usuário').replace(/[\r\n]+/g, ' ').trim();
+  const emailSeguro = emailUsuario ? String(emailUsuario).replace(/[\r\n]+/g, ' ').trim() : null;
+
+  await getTransporter().sendMail({
+    from: `"Acerta AI — Reclamações" <${process.env.GMAIL_USER}>`,
+    to: process.env.GMAIL_USER,
+    replyTo: emailSeguro || undefined,
+    subject: `Nova reclamação de ${nomeSeguro} (#${idUsuario})`,
+    html: `
+      <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; color: #172026;">
+        <h2 style="color: #0F766E;">Nova reclamação recebida</h2>
+        <p><strong>Usuário:</strong> ${escapeHtml(nomeSeguro)} (ID #${idUsuario})</p>
+        <p><strong>E-mail para contato:</strong> ${emailSeguro ? escapeHtml(emailSeguro) : 'não cadastrado'}</p>
+        <p style="white-space: pre-wrap; background: #F1F5F9; padding: 12px 16px; border-radius: 8px;">${escapeHtml(mensagem)}</p>
+      </div>
+    `,
+  });
+}
+
+function escapeHtml(texto) {
+  return String(texto)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+module.exports = { enviarEmailRedefinicaoSenha, enviarReclamacao };

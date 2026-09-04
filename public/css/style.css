@@ -273,6 +273,8 @@ html[data-tema="escuro"] .protocolo-badge { color: var(--ambar-500); background:
 .selo-online { background: rgba(47,158,102,0.12); color: var(--verde-500); }
 .selo-offline { background: rgba(102,112,133,0.12); color: var(--texto-muted); }
 .selo-pendente { background: rgba(102,112,133,0.12); color: var(--texto-muted); }
+.selo-bloqueado { background: rgba(214,69,69,0.1); color: var(--vermelho-500); }
+.selo-premium { background: rgba(217,162,51,0.14); color: var(--ambar-600); }
 
 .acoes-linha { display: flex; gap: 0.35rem; justify-content: flex-end; }
 .acoes-linha button {
@@ -282,6 +284,10 @@ html[data-tema="escuro"] .protocolo-badge { color: var(--ambar-500); background:
 }
 .acoes-linha button:hover { color: var(--navy-900); border-color: var(--navy-700); }
 .acoes-linha button.acao-excluir:hover { color: var(--vermelho-500); border-color: var(--vermelho-500); }
+.acoes-linha button.acao-bloquear:hover { color: var(--vermelho-500); border-color: var(--vermelho-500); }
+.acoes-linha button.acao-bloquear.ativo { color: var(--vermelho-500); border-color: var(--vermelho-500); background: rgba(214,69,69,0.08); }
+.acoes-linha button.acao-premium:hover { color: var(--ambar-600); border-color: var(--ambar-500); }
+.acoes-linha button.acao-premium.ativo { color: var(--ambar-600); border-color: var(--ambar-500); background: rgba(217,162,51,0.12); }
 
 .estado-vazio, .estado-loading { text-align: center; padding: 3rem 1rem; color: var(--texto-muted); }
 .estado-vazio i { font-size: 2.2rem; margin-bottom: 0.75rem; display: block; }

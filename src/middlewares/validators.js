@@ -48,6 +48,11 @@ const usuarioAtualizacaoRules = [
     .isLength({ min: 3, max: 150 }).withMessage('O nome deve ter entre 3 e 150 caracteres.'),
 ];
 
+const usuarioAcessoRules = [
+  param('id').isInt({ min: 1 }).withMessage('ID de usuário inválido.'),
+  body('statusAcesso').isIn(['padrao', 'bloqueado', 'premium']).withMessage('statusAcesso deve ser "padrao", "bloqueado" ou "premium".'),
+];
+
 const trocaSenhaRules = [
   body('senhaAtual').notEmpty().withMessage('Informe a senha atual.'),
   body('novaSenha')
@@ -183,6 +188,15 @@ const denunciaCadastroRules = [
     .isLength({ max: 500 }).withMessage('O motivo deve ter no máximo 500 caracteres.'),
 ];
 
+/* ================= RECLAMAÇÕES ================= */
+
+const reclamacaoCadastroRules = [
+  body('mensagem')
+    .trim()
+    .notEmpty().withMessage('Descreva sua reclamação.')
+    .isLength({ min: 10, max: 2000 }).withMessage('A reclamação deve ter entre 10 e 2000 caracteres.'),
+];
+
 /* ================= ASSINATURAS ================= */
 
 const assinaturaCadastroRules = [
@@ -200,6 +214,7 @@ module.exports = {
   validar,
   usuarioCadastroRules,
   usuarioAtualizacaoRules,
+  usuarioAcessoRules,
   trocaSenhaRules,
   loginRules,
   solicitarRedefinicaoSenhaRules,
@@ -213,6 +228,7 @@ module.exports = {
   comentarioCadastroRules,
   listagemComentariosRules,
   denunciaCadastroRules,
+  reclamacaoCadastroRules,
   assinaturaCadastroRules,
   reembolsoRules,
 };

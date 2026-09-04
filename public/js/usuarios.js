@@ -67,13 +67,51 @@ function renderizarTabelaUsuarios(usuarios) {
       <td>#${u.id}</td>
       <td>${escaparHtml(u.nome)}</td>
       <td>${rotuloStatusOnline(u)}</td>
+      <td>${rotuloStatusAcesso(u)}</td>
       <td>${u.criadoEm ? new Date(u.criadoEm).toLocaleDateString('pt-BR') : '—'}</td>
       <td class="acoes-linha">
         <button title="Editar" onclick="abrirModalEditarUsuario(${u.id})"><i class="bi bi-pencil"></i></button>
+        <button class="acao-bloquear${u.statusAcesso === 'bloqueado' ? ' ativo' : ''}"
+          title="${u.statusAcesso === 'bloqueado' ? 'Desbloquear (voltar ao padrão)' : 'Bloquear — exigir assinatura paga deste usuário'}"
+          onclick="alternarStatusAcesso(${u.id}, 'bloqueado')"><i class="bi bi-lock"></i></button>
+        <button class="acao-premium${u.statusAcesso === 'premium' ? ' ativo' : ''}"
+          title="${u.statusAcesso === 'premium' ? 'Revogar premium (voltar ao padrão)' : 'Conceder acesso premium sem cobrança'}"
+          onclick="alternarStatusAcesso(${u.id}, 'premium')"><i class="bi bi-gem"></i></button>
         <button class="acao-excluir" title="Excluir" onclick="pedirConfirmacaoExclusaoUsuario(${u.id})"><i class="bi bi-trash"></i></button>
       </td>
     </tr>
   `).join('');
+}
+
+function rotuloStatusAcesso(u) {
+  if (u.statusAcesso === 'bloqueado') return '<span class="selo-status selo-bloqueado"><i class="bi bi-lock-fill"></i> Bloqueado</span>';
+  if (u.statusAcesso === 'premium') return '<span class="selo-status selo-premium"><i class="bi bi-gem"></i> Premium</span>';
+  return '<span class="selo-status selo-pendente">Padrão</span>';
+}
+
+/**
+ * Alterna o status de acesso do usuário entre "padrao" e o alvo
+ * informado ("bloqueado" ou "premium"). Clicar de novo no mesmo botão
+ * volta ao padrão; clicar no outro botão troca diretamente de estado.
+ */
+async function alternarStatusAcesso(id, alvo) {
+  const usuario = listaUsuariosCache.find((u) => u.id === id);
+  if (!usuario) return;
+
+  const novoStatus = usuario.statusAcesso === alvo ? 'padrao' : alvo;
+  const mensagens = {
+    bloqueado: 'Usuário bloqueado — agora precisa de assinatura ativa para acessar o conteúdo.',
+    premium: 'Acesso premium concedido ao usuário.',
+    padrao: 'Status de acesso do usuário voltou ao padrão.',
+  };
+
+  try {
+    await API.put(`/usuarios/${id}/acesso`, { statusAcesso: novoStatus });
+    mostrarToast(mensagens[novoStatus], 'sucesso');
+    carregarUsuarios();
+  } catch (err) {
+    mostrarToast(err.message, 'erro');
+  }
 }
 
 function rotuloStatusOnline(u) {
