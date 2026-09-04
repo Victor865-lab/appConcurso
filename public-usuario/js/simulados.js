@@ -59,6 +59,10 @@ async function carregarHistoricoSimulados() {
       `;
     }).join('');
   } catch (err) {
+    if (err.codigo === 'ASSINATURA_NECESSARIA') {
+      exibirCadeadoAssinatura('secao-simulados');
+      return;
+    }
     mostrarToast('Erro ao carregar histórico de simulados.', 'erro');
   }
 }

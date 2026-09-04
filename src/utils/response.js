@@ -36,8 +36,10 @@ function unauthorized(res, message = 'Não autorizado.') {
   return fail(res, message, 401);
 }
 
-function forbidden(res, message = 'Acesso negado.') {
-  return fail(res, message, 403);
+function forbidden(res, message = 'Acesso negado.', codigo = null) {
+  const payload = { sucesso: false, mensagem: message };
+  if (codigo) payload.codigo = codigo;
+  return res.status(403).json(payload);
 }
 
 function serverError(res, message = 'Erro interno no servidor.') {

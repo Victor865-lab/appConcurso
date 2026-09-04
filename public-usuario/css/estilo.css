@@ -407,6 +407,25 @@ html[data-tema="escuro"] .nav-item.ativo { color: var(--teal-500); }
 .pos-2 { color: #A7A7AD; font-weight: 800; }
 .pos-3 { color: #B08D57; font-weight: 800; }
 
+.cadeado-assinatura {
+  display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0.5rem;
+  max-width: 420px; margin: 3rem auto; padding: 2.5rem 2rem;
+  background: var(--surface); border: 1px solid var(--borda); border-radius: var(--raio); box-shadow: var(--sombra);
+}
+.cadeado-assinatura-icone {
+  width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, rgba(245,158,11,0.18), rgba(245,158,11,0.05)); color: var(--ambar-500);
+  font-size: 1.5rem; margin-bottom: 0.5rem;
+}
+.cadeado-assinatura h2 { font-size: 1.15rem; margin: 0; }
+.cadeado-assinatura p { color: var(--texto-muted); font-size: 0.9rem; margin: 0 0 0.5rem; }
+.cadeado-assinatura button {
+  display: inline-flex; align-items: center; gap: 0.5rem; border: none; border-radius: 10px;
+  padding: 0.65rem 1.4rem; font-weight: 700; color: #fff; cursor: pointer;
+  background: linear-gradient(90deg, var(--teal-600), var(--ambar-500)); transition: filter 0.15s ease;
+}
+.cadeado-assinatura button:hover { filter: brightness(1.08); }
+
 .estado-vazio, .estado-loading { text-align: center; padding: 3rem 1rem; color: var(--texto-muted); }
 .estado-vazio i { font-size: 2.2rem; margin-bottom: 0.75rem; display: block; }
 .paginacao-wrapper { display: flex; justify-content: center; margin-top: 1.25rem; }

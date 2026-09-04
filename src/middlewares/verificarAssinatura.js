@@ -38,7 +38,10 @@ async function verificarAssinaturaAtiva(req, res, next) {
       && (!assinatura.dataFim || new Date(assinatura.dataFim) >= new Date());
 
     if (!ativa) {
-      return forbidden(res, 'Assine um plano para acessar este recurso.');
+      // codigo distinto do texto da mensagem para o front-end conseguir
+      // detectar esse caso específico (e mostrar o "cadeado" com CTA pra
+      // assinatura) sem depender de casar a string em português.
+      return forbidden(res, 'Assine um plano para acessar este recurso.', 'ASSINATURA_NECESSARIA');
     }
     next();
   } catch (err) {

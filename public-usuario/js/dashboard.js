@@ -48,6 +48,10 @@ async function carregarDashboard() {
     renderizarBadges(resumoResp.dados.badges);
     await carregarGraficoEvolucao();
   } catch (err) {
+    if (err.codigo === 'ASSINATURA_NECESSARIA') {
+      exibirCadeadoAssinatura('secao-dashboard');
+      return;
+    }
     mostrarToast('Não foi possível carregar seu progresso.', 'erro');
   }
 }

@@ -56,6 +56,7 @@ const API = (() => {
       const erro = new Error(dados?.mensagem || 'Erro ao comunicar com o servidor.');
       erro.status = resposta.status;
       erro.detalhes = dados?.erros || null;
+      erro.codigo = dados?.codigo || null;
       throw erro;
     }
 

@@ -72,6 +72,32 @@ function trocarSecao(secao) {
   }
 }
 
+/**
+ * Substitui o conteúdo de uma seção travada (usuário sem assinatura
+ * ativa, ver ASSINATURA_NECESSARIA em api.js) por um aviso de "cadeado"
+ * com atalho direto para a aba de assinatura.
+ */
+function exibirCadeadoAssinatura(idContainer) {
+  const container = document.getElementById(idContainer);
+  if (!container) return;
+  container.innerHTML = `
+    <div class="cadeado-assinatura">
+      <div class="cadeado-assinatura-icone"><i class="bi bi-lock-fill"></i></div>
+      <h2>Conteúdo exclusivo para assinantes</h2>
+      <p>Assine um plano premium para desbloquear este recurso.</p>
+      <button type="button" onclick="irParaAssinatura()">
+        <span class="nav-item-coroa">👑</span> Ver planos
+      </button>
+    </div>
+  `;
+}
+
+function irParaAssinatura() {
+  trocarSecao('assinatura');
+  document.querySelectorAll('.nav-item').forEach((b) => b.classList.remove('ativo'));
+  document.querySelector('.nav-item[data-secao="assinatura"]')?.classList.add('ativo');
+}
+
 function configurarTema() {
   const btnTema = document.getElementById('btn-tema');
   const chaveTema = 'trilha_tema';

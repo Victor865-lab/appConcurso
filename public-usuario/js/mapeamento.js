@@ -266,6 +266,11 @@ async function responderReel(idQuestao, idAlternativa) {
 
     if (typeof carregarDashboard === 'function') carregarDashboard();
   } catch (err) {
+    if (err.codigo === 'ASSINATURA_NECESSARIA') {
+      mostrarToast('Responder questões é exclusivo para assinantes. Veja os planos disponíveis.', 'info');
+      irParaAssinatura();
+      return;
+    }
     mostrarToast(err.message, 'erro');
   } finally {
     questoesRespondendoAgora.delete(idQuestao);
