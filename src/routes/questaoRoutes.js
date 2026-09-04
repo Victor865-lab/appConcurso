@@ -4,6 +4,7 @@ const router = express.Router();
 const questaoController = require('../controllers/questaoController');
 const autenticar = require('../middlewares/auth');
 const autorizarAdmin = require('../middlewares/autorizarAdmin');
+const verificarAssinaturaAtiva = require('../middlewares/verificarAssinatura');
 const {
   questaoCadastroRules,
   questaoAtualizacaoRules,
@@ -30,11 +31,14 @@ router.get('/filtros', questaoController.valoresFiltro);
  * @route GET /questoes
  * @description Listagem única com suporte a filtros (ativo, respondida,
  * referencia, palavraChave), paginação (pagina, limite) e ordenação
- * (ordenarPor, direcao).
+ * (ordenarPor, direcao). Rota compartilhada com o painel administrativo
+ * (que passa direto por verificarAssinaturaAtiva, ver o bypass de
+ * role='admin' nesse middleware) — para o aluno, o conteúdo das questões
+ * só é liberado com assinatura ativa.
  */
-router.get('/', listagemQuestoesRules, validar, questaoController.listar);
+router.get('/', verificarAssinaturaAtiva, listagemQuestoesRules, validar, questaoController.listar);
 
-router.get('/:id', idParamRule, validar, questaoController.buscarPorId);
+router.get('/:id', verificarAssinaturaAtiva, idParamRule, validar, questaoController.buscarPorId);
 
 /**
  * @route POST /questoes

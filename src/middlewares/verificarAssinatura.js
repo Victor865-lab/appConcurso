@@ -16,6 +16,11 @@
  * Busca o status direto no banco (não confia no JWT) para que uma
  * mudança feita pelo admin tenha efeito imediato, sem esperar o usuário
  * deslogar e logar de novo.
+ *
+ * Contas com role='admin' sempre passam direto — essa checagem também é
+ * usada em rotas compartilhadas com o painel administrativo (ex: listagem
+ * de questões), e um admin nunca deve ficar travado por não ter uma
+ * assinatura paga.
  */
 
 const usuarioModel = require('../models/usuarioModel');
@@ -27,6 +32,7 @@ async function verificarAssinaturaAtiva(req, res, next) {
     const usuario = await usuarioModel.buscarPorId(req.usuario.id);
     if (!usuario) return notFound(res, 'Usuário não encontrado.');
 
+    if (usuario.role === 'admin') return next();
     if (usuario.statusAcesso === 'premium') return next();
 
     const exigirParaEsteUsuario = usuario.statusAcesso === 'bloqueado' || process.env.EXIGIR_ASSINATURA === 'true';

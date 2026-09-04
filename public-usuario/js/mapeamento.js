@@ -157,6 +157,11 @@ async function carregarProximaPaginaMapa() {
 
     ESTADO_MAPA.pagina += 1;
   } catch (err) {
+    if (err.codigo === 'ASSINATURA_NECESSARIA') {
+      ESTADO_MAPA.temMais = false;
+      exibirCadeadoAssinatura('secao-mapeamento');
+      return;
+    }
     mostrarToast('Erro ao carregar questões.', 'erro');
   } finally {
     loading.classList.add('d-none');

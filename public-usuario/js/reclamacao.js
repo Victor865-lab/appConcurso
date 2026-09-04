@@ -1,7 +1,7 @@
 /**
- * "Reclame Aqui" — formulário de feedback na sidebar, logo abaixo do
+ * "Fale conosco" — formulário de feedback na sidebar, logo abaixo do
  * cartão de nível. Envia a mensagem por e-mail para a equipe (POST
- * /reclamacoes), sem exigir nada além do texto da reclamação.
+ * /reclamacoes), sem exigir nada além do texto da mensagem.
  */
 
 let modalReclamacao = null;
